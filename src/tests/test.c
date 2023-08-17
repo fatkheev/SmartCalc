@@ -24,6 +24,7 @@ START_TEST(test_validator)
     ck_assert(validate_string("sin(0.5)"));
     ck_assert(!validate_string("sin(0.5"));
     ck_assert(validate_string(".7 + 3"));
+	 ck_assert(validate_string("sin(-1-(2+(.3-6)))"));
 }
 END_TEST
 
@@ -101,6 +102,36 @@ START_TEST(test_parser_4)
 }
 END_TEST
 
+START_TEST(test_parser_5)
+{
+    int size;
+
+    char** tokens = parse_string("sin(-1-(2+(.3-6)))", &size);
+    ck_assert_int_eq(size, 16);
+    ck_assert_str_eq(tokens[0], "sin");
+	 ck_assert_str_eq(tokens[1], "(");
+    ck_assert_str_eq(tokens[2], "0");
+    ck_assert_str_eq(tokens[3], "-");
+	 ck_assert_str_eq(tokens[4], "1");
+	 ck_assert_str_eq(tokens[5], "-");
+	 ck_assert_str_eq(tokens[6], "(");
+	 ck_assert_str_eq(tokens[7], "2");
+    ck_assert_str_eq(tokens[8], "+");
+    ck_assert_str_eq(tokens[9], "(");
+	 ck_assert_str_eq(tokens[10], "0.3");
+	 ck_assert_str_eq(tokens[11], "-");
+	 ck_assert_str_eq(tokens[12], "6");
+	 ck_assert_str_eq(tokens[13], ")");
+	 ck_assert_str_eq(tokens[14], ")");
+	 ck_assert_str_eq(tokens[14], ")");
+
+    for (int i = 0; i < size; i++) {
+        free(tokens[i]);
+    }
+    free(tokens);
+}
+END_TEST
+
 Suite* calculator_suite(void)
 {
     Suite* s;
@@ -118,6 +149,7 @@ Suite* calculator_suite(void)
     ADD_TEST(tc_core, test_parser_2);
 	 ADD_TEST(tc_core, test_parser_3);
 	 ADD_TEST(tc_core, test_parser_4);
+	 ADD_TEST(tc_core, test_parser_5);
     
     suite_add_tcase(s, tc_core);
 

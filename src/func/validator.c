@@ -2,7 +2,7 @@
 
 // Проверка, является ли символ оператором
 bool is_operator(char c) {
-  return c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')';
+  return c == '+' || c == '-' || c == '*' || c == '/';
 }
 
 // Проверка на наличие функции в строке
@@ -17,7 +17,7 @@ bool validate_string(char* str) {
 
   // Создаем копию входной строки для внесения корректировок
   char* corrected_str = malloc(
-      strlen(str) + 2);  // +2: один для потенциального '0' и один для '\0'
+      strlen(str) * 2);  // +2: один для потенциального '0' и один для '\0'
   int corrected_index = 0;
 
   for (int i = 0; str[i]; i++) {
@@ -30,18 +30,16 @@ bool validate_string(char* str) {
 
     // Проверяем, является ли символ числом, оператором или буквой (для функций)
     if (!isdigit(str[i]) && !is_operator(str[i]) && !isalpha(str[i]) &&
-        str[i] != '.' && str[i] != ' ') {
-      free(corrected_str);
-      return false;
-    }
+    str[i] != '.' && str[i] != ' ' && str[i] != '(' && str[i] != ')') {
+  free(corrected_str);
+  return false;
+}
 
     // Проверка на два оператора подряд
-    if (is_operator(str[i]) && i > 0 && is_operator(str[i - 1]) &&
-        !(str[i - 1] == '(' && (str[i] == '-' || str[i] == '+'))) {
-      free(corrected_str);
-      return false;  // Два оператора подряд, кроме унарного минуса или плюса
-                     // после открывающей скобки
-    }
+     if (is_operator(str[i]) && i > 0 && is_operator(str[i-1])) {
+            free(corrected_str);
+            return false;  // Два оператора подряд
+        }
 
     // Подсчет скобок
     if (str[i] == '(') open_parentheses++;
@@ -59,12 +57,12 @@ bool validate_string(char* str) {
   // Проверка на корректность функций
   if (has_function(corrected_str, "sin") ||
       has_function(corrected_str, "cos")) {
-    // Здесь можно добавить дополнительные проверки для функций
+    // Добавить дополнительные проверки для функций
   }
 
   // Проверка, чтобы строка не заканчивалась на оператор
   int len = strlen(corrected_str);
-  if (is_operator(corrected_str[len - 1]) && corrected_str[len - 1] != ')') {
+  if (is_operator(corrected_str[len - 1])) {
     free(corrected_str);
     return false;
   }
@@ -73,60 +71,68 @@ bool validate_string(char* str) {
   return true;
 }
 
-// Разделение строки на токены
 char** parse_string(const char* str, int* size) {
-    char** tokens = malloc(sizeof(char*) * (strlen(str) + 1));
-    char* token = malloc(sizeof(char) * (strlen(str) + 1));
-    int token_index = 0, tokens_count = 0;
+  char** tokens = malloc(sizeof(char*) *
+                         (strlen(str) + 1));  // Учтем возможное добавление '0'
+  char* token = malloc(sizeof(char) * (strlen(str) + 1));  // Один токен
+  int token_index = 0, tokens_count = 0;
 
-    for (int i = 0; str[i]; i++) {
-        if (is_operator(str[i]) || str[i] == ' ') {
-            if (token_index > 0) {
-                token[token_index] = '\0';
-
-                // Проверка на унарный минус
-                if (strcmp(token, "-") == 0 && tokens_count > 0 && 
-                    (strcmp(tokens[tokens_count-1], "(") == 0 || is_operator(tokens[tokens_count-1][0]))) {
-                    tokens[tokens_count] = strdup("0");
-                    tokens_count++;
-                }
-
-                tokens[tokens_count] = strdup(token);
-                tokens_count++;
-                token_index = 0;
-            }
-            
-            // Если это оператор (и не пробел), добавляем его как отдельный токен
-            if (is_operator(str[i])) {
-                tokens[tokens_count] = malloc(2);
-                tokens[tokens_count][0] = str[i];
-                tokens[tokens_count][1] = '\0';
-                tokens_count++;
-            }
-        } else if (str[i] == '.' && (i == 0 || !isdigit(str[i-1]))) {
-            token[token_index++] = '0';
-            token[token_index++] = '.';
-        } else if (isalpha(str[i])) {
-            int start = i;
-            while (isalpha(str[i])) i++;
-            int len = i - start;
-            tokens[tokens_count] = strndup(str + start, len);
-            tokens_count++;
-            i--;
-        } else {
-            token[token_index] = str[i];
-            token_index++;
-        }
-    }
-
-    if (token_index > 0) {
+  for (int i = 0; str[i]; i++) {
+    // Проверка на унарный минус
+    if (str[i] == '-' && (i == 0 || str[i - 1] == ' ' ||
+                          is_operator(str[i - 1]) || str[i - 1] == '(')) {
+      if (token_index > 0) {
         token[token_index] = '\0';
         tokens[tokens_count] = strdup(token);
         tokens_count++;
+        token_index = 0;
+      }
+      tokens[tokens_count] =
+          strdup("0");  // Добавляем '0' перед унарным минусом
+      tokens_count++;
     }
 
-    free(token);
+    if (is_operator(str[i]) || str[i] == ' ' || str[i] == '(' || str[i] == ')') {
+      if (token_index > 0) {
+        token[token_index] = '\0';  // Завершение текущего токена
+        tokens[tokens_count] = strdup(token);  // Добавление токена в список
+        tokens_count++;
+        token_index = 0;
+      }
 
-    *size = tokens_count;
-    return tokens;
+      // Если это оператор или скобка (и не пробел), добавляем его как отдельный токен
+      if (is_operator(str[i]) || str[i] == '(' || str[i] == ')') {
+        tokens[tokens_count] = malloc(2);
+        tokens[tokens_count][0] = str[i];
+        tokens[tokens_count][1] = '\0';
+        tokens_count++;
+      }
+    } else if (str[i] == '.' && (i == 0 || !isdigit(str[i - 1]))) {
+      token[token_index++] = '0';  // Добавление '0' перед точкой
+      token[token_index++] = '.';
+    } else if (isalpha(str[i])) {
+      // Обработка функций
+      int start = i;
+      while (isalpha(str[i])) i++;
+      int len = i - start;
+      tokens[tokens_count] = strndup(str + start, len);
+      tokens_count++;
+      i--;  // Компенсация инкремента цикла
+    } else {
+      token[token_index] = str[i];
+      token_index++;
+    }
+  }
+
+  // Добавление последнего токена
+  if (token_index > 0) {
+    token[token_index] = '\0';
+    tokens[tokens_count] = strdup(token);
+    tokens_count++;
+  }
+
+  free(token);
+
+  *size = tokens_count;
+  return tokens;
 }
