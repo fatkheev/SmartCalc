@@ -27,7 +27,8 @@ int main() {
       token_count++;
     }
 
-    printf("\n\nКоличество символов во входной строке: %d\n", (int)strlen(input));
+    printf("\n\nКоличество символов во входной строке: %d\n",
+           (int)strlen(input));
     printf("Количество элементов в массиве: %d\n", token_count);
 
     free(tokens);

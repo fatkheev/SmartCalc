@@ -216,12 +216,12 @@ Suite* calculator_suite(void) {
   ADD_TEST(tc_core, test_parser_5);
   ADD_TEST(tc_core, test_parser_6);
   ADD_TEST(tc_core, test_parser_7);
+  ADD_TEST(tc_core, test_parser_8);
 
   suite_add_tcase(s, tc_core);
 
   return s;
 }
-
 int main(void) {
   int number_failed;
   int total_tests;

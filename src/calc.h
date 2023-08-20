@@ -1,15 +1,15 @@
 #define _POSIX_C_SOURCE 200809L
 
-#include <stdio.h>
-#include <stdbool.h>
 #include <ctype.h>
-#include <string.h>
+#include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct {
-    char** tokens;
-    int size;
-    bool is_valid;
+  char** tokens;
+  int size;
+  bool is_valid;
 } ParseResult;
 
 // Валидатор
