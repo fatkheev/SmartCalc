@@ -150,7 +150,7 @@ bool validate_string(const char* str) {
     return false;
   }
 
-  const char* functions[] = {"sin", "cos"};
+  const char* functions[] = {"sin", "cos", "tan"};
   int num_functions = sizeof(functions) / sizeof(functions[0]);
 
   for (int i = 0; corrected_str[i]; i++) {

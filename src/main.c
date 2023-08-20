@@ -1,11 +1,11 @@
 #include "calc.h"
 
 int main() {
-  char input[] = "sin(1)";
+  char input[] = "tan(-1+5)";
   char** tokens = parse_string(input);
   printf("Обрабатываемая строка: %s\n", input);
   if (tokens) {
-    printf("Токены:\n");
+    printf("Токены:\n\n");
 
     int i = 0;
     int token_count = 0;
