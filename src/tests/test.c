@@ -97,23 +97,25 @@ START_TEST(test_parser_4) {
 END_TEST
 
 START_TEST(test_parser_5) {
-  char** tokens = parse_string("sin(-1-(2+(.3-6)))");
+  char** tokens = parse_string("sin((-1)-(2+(.3-6)))");
   ck_assert_str_eq(tokens[0], "sin");
   ck_assert_str_eq(tokens[1], "(");
-  ck_assert_str_eq(tokens[2], "0");
-  ck_assert_str_eq(tokens[3], "-");
-  ck_assert_str_eq(tokens[4], "1");
-  ck_assert_str_eq(tokens[5], "-");
-  ck_assert_str_eq(tokens[6], "(");
-  ck_assert_str_eq(tokens[7], "2");
-  ck_assert_str_eq(tokens[8], "+");
-  ck_assert_str_eq(tokens[9], "(");
-  ck_assert_str_eq(tokens[10], "0.3");
-  ck_assert_str_eq(tokens[11], "-");
-  ck_assert_str_eq(tokens[12], "6");
-  ck_assert_str_eq(tokens[13], ")");
-  ck_assert_str_eq(tokens[14], ")");
+  ck_assert_str_eq(tokens[2], "(");
+  ck_assert_str_eq(tokens[3], "0");
+  ck_assert_str_eq(tokens[4], "-");
+  ck_assert_str_eq(tokens[5], "1");
+  ck_assert_str_eq(tokens[6], ")");
+  ck_assert_str_eq(tokens[7], "-");
+  ck_assert_str_eq(tokens[8], "(");
+  ck_assert_str_eq(tokens[9], "2");
+  ck_assert_str_eq(tokens[10], "+");
+  ck_assert_str_eq(tokens[11], "(");
+  ck_assert_str_eq(tokens[12], "0.3");
+  ck_assert_str_eq(tokens[13], "-");
+  ck_assert_str_eq(tokens[14], "6");
   ck_assert_str_eq(tokens[15], ")");
+  ck_assert_str_eq(tokens[16], ")");
+  ck_assert_str_eq(tokens[17], ")");
 
   int i = 0;
   while (tokens[i]) {
@@ -126,18 +128,65 @@ END_TEST
 
 START_TEST(test_parser_6) {
   char** tokens = parse_string("sin(-3+(-.5))");
-ck_assert_str_eq(tokens[0], "sin");
-ck_assert_str_eq(tokens[1], "(");
-ck_assert_str_eq(tokens[2], "0");
-ck_assert_str_eq(tokens[3], "-");
-ck_assert_str_eq(tokens[4], "3");
-ck_assert_str_eq(tokens[5], "+");
-ck_assert_str_eq(tokens[6], "(");
-ck_assert_str_eq(tokens[7], "0");
-ck_assert_str_eq(tokens[8], "-");
-ck_assert_str_eq(tokens[9], "0.5");
-ck_assert_str_eq(tokens[10], ")");
-ck_assert_str_eq(tokens[11], ")");
+
+  ck_assert_str_eq(tokens[0], "sin");
+  ck_assert_str_eq(tokens[1], "(");
+  ck_assert_str_eq(tokens[2], "(");
+  ck_assert_str_eq(tokens[3], "0");
+  ck_assert_str_eq(tokens[4], "-");
+  ck_assert_str_eq(tokens[5], "3");
+  ck_assert_str_eq(tokens[6], ")");
+  ck_assert_str_eq(tokens[7], "+");
+  ck_assert_str_eq(tokens[8], "(");
+  ck_assert_str_eq(tokens[9], "0");
+  ck_assert_str_eq(tokens[10], "-");
+  ck_assert_str_eq(tokens[11], "0.5");
+  ck_assert_str_eq(tokens[12], ")");
+  ck_assert_str_eq(tokens[13], ")");
+
+  int i = 0;
+  while (tokens[i]) {
+    free(tokens[i]);
+    i++;
+  }
+  free(tokens);
+}
+END_TEST
+
+START_TEST(test_parser_7) {
+  char** tokens = parse_string("tan(-1+5)");
+  ck_assert_str_eq(tokens[0], "tan");
+  ck_assert_str_eq(tokens[1], "(");
+  ck_assert_str_eq(tokens[2], "(");
+  ck_assert_str_eq(tokens[3], "0");
+  ck_assert_str_eq(tokens[4], "-");
+  ck_assert_str_eq(tokens[5], "1");
+  ck_assert_str_eq(tokens[6], ")");
+  ck_assert_str_eq(tokens[7], "+");
+  ck_assert_str_eq(tokens[8], "5");
+  ck_assert_str_eq(tokens[9], ")");
+
+  int i = 0;
+  while (tokens[i]) {
+    free(tokens[i]);
+    i++;
+  }
+  free(tokens);
+}
+END_TEST
+
+START_TEST(test_parser_8) {
+  char** tokens = parse_string("sin(1    + -.7)");
+  ck_assert_str_eq(tokens[0], "sin");
+  ck_assert_str_eq(tokens[1], "(");
+  ck_assert_str_eq(tokens[2], "1");
+  ck_assert_str_eq(tokens[3], "+");
+  ck_assert_str_eq(tokens[4], "(");
+  ck_assert_str_eq(tokens[5], "0");
+  ck_assert_str_eq(tokens[6], "-");
+  ck_assert_str_eq(tokens[7], "0.7");
+  ck_assert_str_eq(tokens[8], ")");
+  ck_assert_str_eq(tokens[9], ")");
 
   int i = 0;
   while (tokens[i]) {
@@ -166,6 +215,7 @@ Suite* calculator_suite(void) {
   ADD_TEST(tc_core, test_parser_4);
   ADD_TEST(tc_core, test_parser_5);
   ADD_TEST(tc_core, test_parser_6);
+  ADD_TEST(tc_core, test_parser_7);
 
   suite_add_tcase(s, tc_core);
 

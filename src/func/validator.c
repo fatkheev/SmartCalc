@@ -1,7 +1,6 @@
 #include "../calc.h"
 
 char** parse_string(const char* str) {
-  // Проверка валидации на начальном этапе
   if (!validate_string(str)) {
     return NULL;
   }
@@ -12,55 +11,64 @@ char** parse_string(const char* str) {
   char* token = (char*)malloc(sizeof(char) * (strlen(str) + 1));
   memset(token, 0, sizeof(char) * (strlen(str) + 1));
   int token_index = 0, tokens_count = 0;
-  bool unary_detected = false;
 
   for (int i = 0; str[i]; i++) {
-    // Проверка на унарный минус
-    if (str[i] == '-' && (i == 0 || str[i - 1] == ' ' ||
-                          is_operator(str[i - 1]) || str[i - 1] == '(')) {
+    if (str[i] == '-' &&
+        (i == 0 || str[i - 1] == ' ' || is_operator(str[i - 1]) ||
+         str[i - 1] == '(') &&
+        (isdigit(str[i + 1]) || str[i + 1] == '.')) {
+      // Проверяем, заключено ли выражение в скобки
+      int j = i + 1;
+      while (str[j] && (isdigit(str[j]) || str[j] == '.')) {
+        j++;
+      }
+      bool isAlreadyInParentheses = (str[i - 1] == '(' && str[j] == ')');
+
+      if (!isAlreadyInParentheses) {
+        tokens[tokens_count++] = strdup("(");
+        tokens[tokens_count++] = strdup("0");
+        tokens[tokens_count++] = strdup("-");
+      } else {
+        tokens[tokens_count++] = strdup("0");
+        tokens[tokens_count++] = strdup("-");
+      }
+
+      i++;  // Переходим к следующему символу
+      while (str[i] == ' ') {
+        i++;  // Пропускаем пробелы
+      }
+      if (str[i] ==
+          '.') {  // Если следующий символ - точка, добавляем 0 перед ней
+        token[token_index++] = '0';
+      }
+      while (str[i] && !is_operator(str[i]) && str[i] != ')' && str[i] != '(') {
+        token[token_index++] = str[i];
+        i++;
+      }
       if (token_index > 0) {
         token[token_index] = '\0';
         tokens[tokens_count] = strdup(token);
         tokens_count++;
         token_index = 0;
       }
-      tokens[tokens_count++] = strdup("(");  // Открываем скобку
-      tokens[tokens_count++] = strdup("0");
-      tokens[tokens_count++] = strdup("-");
-      unary_detected = true;
-      continue;  // Пропускаем оператор минуса, так как мы уже добавили его
-    }
-
-    if (unary_detected && !is_operator(str[i]) && str[i] != ')' &&
-        str[i] != '(') {
-      token[token_index++] = str[i];
+      if (!isAlreadyInParentheses) {
+        tokens[tokens_count++] = strdup(")");
+      }
+      if (str[i]) {
+        i--;  // Возвращаемся к текущему символу для дальнейшей обработки
+      }
       continue;
     }
 
-    if (unary_detected &&
-        (is_operator(str[i]) || str[i] == ')' || str[i] == '(')) {
+    if (is_operator(str[i]) || str[i] == ' ' || str[i] == '(' ||
+        str[i] == ')') {
       if (token_index > 0) {
         token[token_index] = '\0';
         tokens[tokens_count] = strdup(token);
         tokens_count++;
         token_index = 0;
       }
-      tokens[tokens_count++] = strdup(")");  // Закрываем скобку
-      unary_detected = false;
-    }
 
-    // Продолжаем обработку строки
-    if (is_operator(str[i]) || str[i] == ' ' || str[i] == '(' ||
-        str[i] == ')') {
-      if (token_index > 0) {
-        token[token_index] = '\0';  // Завершение текущего токена
-        tokens[tokens_count] = strdup(token);  // Добавление токена в список
-        tokens_count++;
-        token_index = 0;
-      }
-
-      // Если это оператор или скобка (и не пробел), добавляем его как отдельный
-      // токен
       if (is_operator(str[i]) || str[i] == '(' || str[i] == ')') {
         tokens[tokens_count] = (char*)malloc(2);
         tokens[tokens_count][0] = str[i];
@@ -68,32 +76,24 @@ char** parse_string(const char* str) {
         tokens_count++;
       }
     } else if (str[i] == '.' && (i == 0 || !isdigit(str[i - 1]))) {
-      token[token_index++] = '0';  // Добавление '0' перед точкой
+      token[token_index++] = '0';
       token[token_index++] = '.';
     } else if (isalpha(str[i])) {
-      // Обработка функций
       int start = i;
       while (isalpha(str[i])) i++;
       int len = i - start;
       tokens[tokens_count] = strndup(str + start, len);
       tokens_count++;
-      i--;  // Компенсация инкремента цикла
+      i--;
     } else {
       token[token_index] = str[i];
       token_index++;
     }
   }
 
-  // Добавление последнего токена
   if (token_index > 0) {
     token[token_index] = '\0';
     tokens[tokens_count] = strdup(token);
-  }
-
-  // Если последний символ был частью выражения унарного минуса, добавляем
-  // закрывающую скобку
-  if (unary_detected) {
-    tokens[tokens_count++] = strdup(")");
   }
 
   free(token);
