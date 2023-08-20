@@ -1,7 +1,7 @@
 #include "calc.h"
 
 int main() {
-  char input[] = ")1+8(";
+  char input[] = "sin(1)";
   char** tokens = parse_string(input);
   printf("Обрабатываемая строка: %s\n", input);
   if (tokens) {
@@ -9,13 +9,23 @@ int main() {
 
     int i = 0;
     int token_count = 0;
-    printf("char** tokens = parse_string(\"%s\");\n\n", input);
+
+    // Для тестов:
+    // printf("char** tokens = parse_string(\"%s\");\n\n", input);
+    // while (tokens[i]) {
+    //   printf("ck_assert_str_eq(tokens[%d], \"%s\");\n", i, tokens[i]);
+    //   free(tokens[i]);
+    //   i++;
+    //   token_count++;
+    // }
+
     while (tokens[i]) {
-      printf("ck_assert_str_eq(tokens[%d], \"%s\");\n", i, tokens[i]);
+      printf("%s\n", tokens[i]);
       free(tokens[i]);
       i++;
       token_count++;
     }
+
     printf("\nКоличество символов во входной строке: %d\n", (int)strlen(input));
     printf("Количество элементов в массиве: %d\n", token_count);
 

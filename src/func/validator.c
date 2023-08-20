@@ -6,12 +6,13 @@ char** parse_string(const char* str) {
     return NULL;
   }
 
-  char** tokens = malloc(sizeof(char*) * (2 * strlen(str) + 1));
+  char** tokens = (char**)malloc(sizeof(char*) * (2 * strlen(str) + 1));
   memset(tokens, 0, sizeof(char*) * (2 * strlen(str) + 1));
 
-  char* token = malloc(sizeof(char) * (strlen(str) + 1));
+  char* token = (char*)malloc(sizeof(char) * (strlen(str) + 1));
   memset(token, 0, sizeof(char) * (strlen(str) + 1));
   int token_index = 0, tokens_count = 0;
+  bool unary_detected = false;
 
   for (int i = 0; str[i]; i++) {
     // Проверка на унарный минус
@@ -23,11 +24,32 @@ char** parse_string(const char* str) {
         tokens_count++;
         token_index = 0;
       }
-      tokens[tokens_count] =
-          strdup("0");  // Добавляем '0' перед унарным минусом
-      tokens_count++;
+      tokens[tokens_count++] = strdup("(");  // Открываем скобку
+      tokens[tokens_count++] = strdup("0");
+      tokens[tokens_count++] = strdup("-");
+      unary_detected = true;
+      continue;  // Пропускаем оператор минуса, так как мы уже добавили его
     }
 
+    if (unary_detected && !is_operator(str[i]) && str[i] != ')' &&
+        str[i] != '(') {
+      token[token_index++] = str[i];
+      continue;
+    }
+
+    if (unary_detected &&
+        (is_operator(str[i]) || str[i] == ')' || str[i] == '(')) {
+      if (token_index > 0) {
+        token[token_index] = '\0';
+        tokens[tokens_count] = strdup(token);
+        tokens_count++;
+        token_index = 0;
+      }
+      tokens[tokens_count++] = strdup(")");  // Закрываем скобку
+      unary_detected = false;
+    }
+
+    // Продолжаем обработку строки
     if (is_operator(str[i]) || str[i] == ' ' || str[i] == '(' ||
         str[i] == ')') {
       if (token_index > 0) {
@@ -40,7 +62,7 @@ char** parse_string(const char* str) {
       // Если это оператор или скобка (и не пробел), добавляем его как отдельный
       // токен
       if (is_operator(str[i]) || str[i] == '(' || str[i] == ')') {
-        tokens[tokens_count] = malloc(2);
+        tokens[tokens_count] = (char*)malloc(2);
         tokens[tokens_count][0] = str[i];
         tokens[tokens_count][1] = '\0';
         tokens_count++;
@@ -66,7 +88,12 @@ char** parse_string(const char* str) {
   if (token_index > 0) {
     token[token_index] = '\0';
     tokens[tokens_count] = strdup(token);
-    tokens_count++;
+  }
+
+  // Если последний символ был частью выражения унарного минуса, добавляем
+  // закрывающую скобку
+  if (unary_detected) {
+    tokens[tokens_count++] = strdup(")");
   }
 
   free(token);
@@ -77,7 +104,7 @@ bool validate_string(const char* str) {
   int open_parentheses = 0;
   int close_parentheses = 0;
 
-  char* corrected_str = calloc(strlen(str) * 2 + 2, sizeof(char));
+  char* corrected_str = (char*)calloc(strlen(str) * 2 + 2, sizeof(char));
   int corrected_index = 0;
 
   for (int i = 0; str[i]; i++) {
@@ -132,8 +159,13 @@ bool validate_string(const char* str) {
       for (int j = 0; j < num_functions; j++) {
         if (strncmp(corrected_str + i, functions[j], strlen(functions[j])) ==
             0) {
+          // Проверяем, следует ли за именем функции открывающая скобка
+          if (corrected_str[i + strlen(functions[j])] != '(') {
+            free(corrected_str);
+            return false;
+          }
           is_valid = true;
-          i += strlen(functions[j]) - 1;
+          i += strlen(functions[j]) - 1;  // Продолжаем после имени функции
           break;
         }
       }
