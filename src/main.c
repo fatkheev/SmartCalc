@@ -1,7 +1,7 @@
 #include "calc.h"
 
 int main() {
-  char input[] = "sin(1    + -.7)";
+  char input[] = "(     -.100)";
   char** tokens = parse_string(input);
   printf("Обрабатываемая строка: %s\n", input);
   if (tokens) {
@@ -21,7 +21,7 @@ int main() {
 
     // Для проверки в реальном времени:
     while (tokens[i]) {
-      printf("%s\n", tokens[i]);
+      printf("%s", tokens[i]);
       free(tokens[i]);
       i++;
       token_count++;
