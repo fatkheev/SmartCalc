@@ -197,6 +197,58 @@ START_TEST(test_parser_8) {
 }
 END_TEST
 
+// Тесты для стека:
+START_TEST(test_stack_push_pop) {
+  Stack* stack = createStack(10);
+
+  char* item1 = "5";
+  char* item2 = "+";
+  char* item3 = "10";
+
+  push(stack, item1);
+  push(stack, item2);
+  push(stack, item3);
+
+  ck_assert_str_eq(pop(stack), item3);
+  ck_assert_str_eq(pop(stack), item2);
+  ck_assert_str_eq(pop(stack), item1);
+
+  freeStack(stack);
+}
+END_TEST
+
+START_TEST(test_stack_peek) {
+  Stack* stack = createStack(10);
+
+  char* item = "7";
+
+  push(stack, item);
+
+  ck_assert_str_eq(peek(stack), item);
+  ck_assert_str_eq(peek(stack), item);  // Убедимся, что peek не удаляет элемент
+
+  freeStack(stack);
+}
+END_TEST
+
+START_TEST(test_stack_overflow) {
+  Stack* stack = createStack(2);
+
+  char* item1 = "1";
+  char* item2 = "+";
+  char* item3 = "2";
+
+  push(stack, item1);
+  push(stack, item2);
+
+  ck_assert_int_eq(isFull(stack), 1);
+  ck_assert_int_eq(push(stack, item3),
+                   -1);  // Ожидаем ошибку, так как стек полон
+
+  freeStack(stack);
+}
+END_TEST
+
 Suite* calculator_suite(void) {
   Suite* s;
   TCase* tc_core;
@@ -217,6 +269,11 @@ Suite* calculator_suite(void) {
   ADD_TEST(tc_core, test_parser_6);
   ADD_TEST(tc_core, test_parser_7);
   ADD_TEST(tc_core, test_parser_8);
+
+  // Тесты для стека
+  ADD_TEST(tc_core, test_stack_push_pop);
+  ADD_TEST(tc_core, test_stack_peek);
+  ADD_TEST(tc_core, test_stack_overflow);
 
   suite_add_tcase(s, tc_core);
 
