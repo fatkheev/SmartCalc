@@ -197,6 +197,23 @@ START_TEST(test_parser_8) {
 }
 END_TEST
 
+START_TEST(test_parser_9) {
+  char** tokens = parse_string("-1");
+  ck_assert_str_eq(tokens[0], "(");
+  ck_assert_str_eq(tokens[1], "0");
+  ck_assert_str_eq(tokens[2], "-");
+  ck_assert_str_eq(tokens[3], "1");
+  ck_assert_str_eq(tokens[4], ")");
+
+  int i = 0;
+  while (tokens[i]) {
+    free(tokens[i]);
+    i++;
+  }
+  free(tokens);
+}
+END_TEST
+
 // Тесты для стека:
 START_TEST(test_stack_push_pop) {
   Stack* stack = createStack(10);
@@ -269,6 +286,7 @@ Suite* calculator_suite(void) {
   ADD_TEST(tc_core, test_parser_6);
   ADD_TEST(tc_core, test_parser_7);
   ADD_TEST(tc_core, test_parser_8);
+  ADD_TEST(tc_core, test_parser_9);
 
   // Тесты для стека
   ADD_TEST(tc_core, test_stack_push_pop);

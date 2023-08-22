@@ -42,5 +42,8 @@ main: clean
 valgrind: clean
 	make test && CK_FORK=no valgrind --vgdb=no --leak-check=full --show-reachable=yes --show-leak-kinds=all --track-origins=yes --verbose --read-var-info=yes ./test
 
+valgrind_main: clean
+	make main && CK_FORK=no valgrind --vgdb=no --leak-check=full --show-reachable=yes --show-leak-kinds=all --track-origins=yes --verbose --read-var-info=yes ./main
+
 leaks: clean
 	make test && leaks -atExit -- ./test

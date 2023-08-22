@@ -80,28 +80,36 @@ bool validate_string(const char* str) {
   }
 
   // Список допустимых функций
-  const char* functions[] = {"sin", "cos", "tan"};
+  const char* functions[] = {"sin", "cos", "tan", "mod"};
   int num_functions = sizeof(functions) / sizeof(functions[0]);
 
   // Проверка на наличие корректных математических функций
-  for (int i = 0; str[i]; i++) {
-    if (isalpha(str[i])) {
-      bool is_valid = false;
-      for (int j = 0; j < num_functions; j++) {
-        if (strncmp(str + i, functions[j], strlen(functions[j])) == 0) {
-          if (str[i + strlen(functions[j])] != '(') {
-            return false;
-          }
-          is_valid = true;
-          i += strlen(functions[j]) - 1;  // Пропуск символов функции
-          break;
+    for (int i = 0; str[i]; i++) {
+        if (isalpha(str[i])) {
+            bool is_valid = false;
+            for (int j = 0; j < num_functions; j++) {
+                if (strncmp(str + i, functions[j], strlen(functions[j])) == 0) {
+                    // Исключение для "mod": не требуется наличие скобок
+                    if (strcmp(functions[j], "mod") == 0) {
+                        is_valid = true;
+                        i += 2;  // Пропускаем символы "od"
+                        break;
+                    }
+
+                    // Для остальных функций требуются скобки
+                    if (str[i + strlen(functions[j])] != '(') {
+                        return false;
+                    }
+                    is_valid = true;
+                    i += strlen(functions[j]) - 1;  // Пропуск символов функции
+                    break;
+                }
+            }
+            if (!is_valid) {
+                return false;
+            }
         }
-      }
-      if (!is_valid) {
-        return false;
-      }
     }
-  }
 
   // Проверка, что строка не заканчивается оператором
   int len = strlen(str);
