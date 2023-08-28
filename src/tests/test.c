@@ -67,6 +67,14 @@ START_TEST(test_calculate_5)
 }
 END_TEST
 
+START_TEST(test_calculate_6)
+{
+    char postfix[] = "-2+2*2";
+    double result = calculate(postfix);
+    ck_assert_double_eq_tol(result, 2.0, 1e-6);
+}
+END_TEST
+
 Suite* calculator_suite(void) {
   Suite* s;
   TCase* tc_core;
@@ -84,6 +92,7 @@ Suite* calculator_suite(void) {
   ADD_TEST(tc_core, test_calculate_3);
   ADD_TEST(tc_core, test_calculate_4);
   ADD_TEST(tc_core, test_calculate_5);
+  ADD_TEST(tc_core, test_calculate_6);
 
   suite_add_tcase(s, tc_core);
 
