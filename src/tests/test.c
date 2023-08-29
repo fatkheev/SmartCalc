@@ -1,4 +1,5 @@
 #include <check.h>
+
 #include "../stack.h"
 
 // Глобальные переменные для хранения имен тестов
@@ -18,180 +19,159 @@ int test_count = 0;
 #define COLOR_RESET "\033[0m"
 
 // Тесты
-START_TEST(test_converter_1)
-{
-    char expression[] = "10-5+3";
-    char postfix[100];
-    converter(expression, postfix);
-    ck_assert_str_eq(postfix, "10 5 - 3 + ");
+START_TEST(test_converter_1) {
+  char expression[] = "10-5+3";
+  char postfix[100];
+  converter(expression, postfix);
+  ck_assert_str_eq(postfix, "10 5 - 3 + ");
 }
 END_TEST
 
-START_TEST(test_calculate_1)
-{
-    char postfix[] = "10-5+3";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, 10-5+3, 1e-6);
+START_TEST(test_calculate_1) {
+  char postfix[] = "10-5+3";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, 10 - 5 + 3, 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_2)
-{
-    char postfix[] = "-5*   (3    -1)";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, -5*(3-1), 1e-6);
+START_TEST(test_calculate_2) {
+  char postfix[] = "-5*   (3    -1)";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, -5 * (3 - 1), 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_3)
-{
-    char postfix[] = "+    5*(3-   1)";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, 5*(3-1), 1e-6);
+START_TEST(test_calculate_3) {
+  char postfix[] = "+    5*(3-   1)";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, 5 * (3 - 1), 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_4)
-{
-    char postfix[] = "9mod   2";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, 9%2, 1e-6);
+START_TEST(test_calculate_4) {
+  char postfix[] = "9mod   2";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, 9 % 2, 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_5)
-{
-    char postfix[] = "2* (sin(1) + 1)";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, 2*(sin(1)+1), 1e-6);
+START_TEST(test_calculate_5) {
+  char postfix[] = "2* (sin(1) + 1)";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, 2 * (sin(1) + 1), 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_6)
-{
-    char postfix[] = "-2+2*2";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, -2+2*2, 1e-6);
+START_TEST(test_calculate_6) {
+  char postfix[] = "-2+2*2";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, -2 + 2 * 2, 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_7)
-{
-    char postfix[] = "1.25/3.45";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, 1.25/3.45, 1e-6);
+START_TEST(test_calculate_7) {
+  char postfix[] = "1.25/3.45";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, 1.25 / 3.45, 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_8)
-{
-    char postfix[] = "1.25mod3.45";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, fmod(1.25, 3.45), 1e-6);
+START_TEST(test_calculate_8) {
+  char postfix[] = "1.25mod3.45";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, fmod(1.25, 3.45), 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_9)
-{
-    char postfix[] = "1.25^3.45";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, powf(1.25, 3.45), 1e-6);
+START_TEST(test_calculate_9) {
+  char postfix[] = "1.25^3.45";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, powf(1.25, 3.45), 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_10)
-{
-    char postfix[] = "(+5.23+1.25)*(0.25+0.001)";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, (+5.23+1.25)*(0.25+0.001), 1e-6);
+START_TEST(test_calculate_10) {
+  char postfix[] = "(+5.23+1.25)*(0.25+0.001)";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, (+5.23 + 1.25) * (0.25 + 0.001), 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_11)
-{
-    char postfix[] = "sin((5.23+1.25)*(0.25+0.001))";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, sin((5.23+1.25)*(0.25+0.001)), 1e-6);
+START_TEST(test_calculate_11) {
+  char postfix[] = "sin((5.23+1.25)*(0.25+0.001))";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, sin((5.23 + 1.25) * (0.25 + 0.001)), 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_12)
-{
-    char postfix[] = "cos((5.23+1.25)*(0.25+0.001))";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, cos((5.23+1.25)*(0.25+0.001)), 1e-6);
+START_TEST(test_calculate_12) {
+  char postfix[] = "cos((5.23+1.25)*(0.25+0.001))";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, cos((5.23 + 1.25) * (0.25 + 0.001)), 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_13)
-{
-    char postfix[] = "tan((5.23+1.25)*(0.25+0.001))";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, tan((5.23+1.25)*(0.25+0.001)), 1e-6);
+START_TEST(test_calculate_13) {
+  char postfix[] = "tan((5.23+1.25)*(0.25+0.001))";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, tan((5.23 + 1.25) * (0.25 + 0.001)), 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_14)
-{
-    char postfix[] = "asin(7/7.7)";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, asin(7/7.7), 1e-6);
+START_TEST(test_calculate_14) {
+  char postfix[] = "asin(7/7.7)";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, asin(7 / 7.7), 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_15)
-{
-    char postfix[] = "acos(7/7.7)";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, acos(7/7.7), 1e-6);
+START_TEST(test_calculate_15) {
+  char postfix[] = "acos(7/7.7)";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, acos(7 / 7.7), 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_16)
-{
-    char postfix[] = "atan(7/7.7)";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, atan(7/7.7), 1e-6);
+START_TEST(test_calculate_16) {
+  char postfix[] = "atan(7/7.7)";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, atan(7 / 7.7), 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_17)
-{
-    char postfix[] = "sqrt(1357-245)";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, sqrt(1357-245), 1e-6);
+START_TEST(test_calculate_17) {
+  char postfix[] = "sqrt(1357-245)";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, sqrt(1357 - 245), 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_18)
-{
-    char postfix[] = "ln(1357-245)";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, log(1357-245), 1e-6);
+START_TEST(test_calculate_18) {
+  char postfix[] = "ln(1357-245)";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, log(1357 - 245), 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_19)
-{
-    char postfix[] = "log(1357-245)";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, log10(1357-245), 1e-6);
+START_TEST(test_calculate_19) {
+  char postfix[] = "log(1357-245)";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, log10(1357 - 245), 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_20)
-{
-    char postfix[] = "log(32+1)*7/11*432*(sin(2)*12-45+4)/2";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, log10(32+1)*7/11*432*(sin(2)*12-45+4)/2, 1e-6);
+START_TEST(test_calculate_20) {
+  char postfix[] = "log(32+1)*7/11*432*(sin(2)*12-45+4)/2";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(
+      result, log10(32 + 1) * 7 / 11 * 432 * (sin(2) * 12 - 45 + 4) / 2, 1e-6);
 }
 END_TEST
 
-START_TEST(test_calculate_21)
-{
-    char postfix[] = "cos(sin(tan(-0.005)))";
-    double result = calculate(postfix);
-    ck_assert_double_eq_tol(result, cos(sin(tan(-0.005))), 1e-6);
+START_TEST(test_calculate_21) {
+  char postfix[] = "cos(sin(tan(-0.005)))";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, cos(sin(tan(-0.005))), 1e-6);
 }
 END_TEST
 
