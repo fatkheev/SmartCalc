@@ -80,7 +80,7 @@ bool validate_string(const char* str) {
   }
 
   // Список допустимых функций
-  const char* functions[] = {"sin", "cos", "tan", "mod"};
+  const char* functions[] = {"sin", "cos", "tan", "asin", "acos", "atan", "sqrt", "ln", "log", "mod"};
   int num_functions = sizeof(functions) / sizeof(functions[0]);
 
   // Проверка на наличие корректных математических функций

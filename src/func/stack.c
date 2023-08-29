@@ -58,6 +58,11 @@ char getFunctionChar(const char* str) {
 }
 
 void converter(const char* expression, char* output) {
+  if (!validate_string(expression)) {
+    printf("Error\n");
+    *output = '\0';
+    return;
+  }
   char operators[strlen(expression) + 1];
   int top = -1;
   int k = 0;
@@ -148,6 +153,10 @@ void converter(const char* expression, char* output) {
 }
 
 double calculate(const char* infixExpression) {
+  if (!validate_string(infixExpression)) {
+    printf("Error\n");
+    return 0.0;
+  }
   char postfix[strlen(infixExpression) * 2];
   converter(infixExpression, postfix);
 
@@ -195,9 +204,10 @@ double calculate(const char* infixExpression) {
         values[++top] = value1 / value2;
       } else if (ch == '^') {
         values[++top] = pow(value1, value2);
-      } else if (ch == 'm') {
+      } else if (ch == 'm' || ch == '%') {
         values[++top] = fmod(value1, value2);
       }
+
     } else if (isFunction(ch)) {
       double value = values[top--];
       if (ch == 'C') {
