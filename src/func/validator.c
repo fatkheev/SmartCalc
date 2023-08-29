@@ -24,8 +24,18 @@ bool validate_string(const char* str) {
     }
 
     // Проверка на недопустимое расположение точек
-    if (str[i] == '.' && (i == 0 || !isdigit(str[i - 1]))) {
+    if (str[i] == '.') {
+      // Проверка, что перед точкой есть число
+      if (i == 0 || !isdigit(str[i - 1])) {
+        return false;
+      }
+
       int j = i + 1;
+      // Проверка, что после точки идет число
+      if (!isdigit(str[j])) {
+        return false;
+      }
+
       while (str[j] && isdigit(str[j])) j++;
       if (str[j] == '.') return false;
     }
@@ -80,7 +90,8 @@ bool validate_string(const char* str) {
   }
 
   // Список допустимых функций
-  const char* functions[] = {"sin", "cos", "tan", "asin", "acos", "atan", "sqrt", "ln", "log", "mod"};
+  const char* functions[] = {"sin",  "cos",  "tan", "asin", "acos",
+                             "atan", "sqrt", "ln",  "log",  "mod"};
   int num_functions = sizeof(functions) / sizeof(functions[0]);
 
   // Проверка на наличие корректных математических функций
