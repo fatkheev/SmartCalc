@@ -18,7 +18,7 @@ int test_count = 0;
 #define COLOR_RED "\033[31m"
 #define COLOR_RESET "\033[0m"
 
-// Тесты
+// Тесты для конвертации
 START_TEST(test_converter_1) {
   char expression[] = "10-5+3";
   char postfix[100];
@@ -27,6 +27,25 @@ START_TEST(test_converter_1) {
 }
 END_TEST
 
+// Тесты для вадидации
+START_TEST(test_validate_string) {
+    ck_assert_double_eq(validate_string("1 2"), false);
+    ck_assert_double_eq(validate_string("123 456"), false);
+    ck_assert_double_eq(validate_string("1.2 3.4"), false);
+    ck_assert_double_eq(validate_string("10 20 + 30 40"), false);
+    ck_assert_double_eq(validate_string("10 + 20 30"), false);
+    ck_assert_double_eq(validate_string("8   mod"), false);
+    ck_assert_double_eq(validate_string("mod 8"), false);
+    ck_assert_double_eq(validate_string("/8"), false);
+    ck_assert_double_eq(validate_string("- - - - 8"), false);
+    ck_assert_double_eq(validate_string("- + - 8 -"), false);
+    ck_assert_double_eq(validate_string("- * 8"), false);
+    ck_assert_double_eq(validate_string("-*8"), false);
+    ck_assert_double_eq(validate_string("* * * *"), false);
+}
+END_TEST
+
+//Тесты для калькуляции
 START_TEST(test_calculate_1) {
   char postfix[] = "10-5+3";
   double result = calculate(postfix);
@@ -161,10 +180,10 @@ START_TEST(test_calculate_19) {
 END_TEST
 
 START_TEST(test_calculate_20) {
-  char postfix[] = "log(32+1)*7/11*432*(sin(2)*12-45+4)/2";
+  char postfix[] = "log(32+1)*7/11*432*(sin(2)*12-.45+4)/2";
   double result = calculate(postfix);
   ck_assert_double_eq_tol(
-      result, log10(32 + 1) * 7 / 11 * 432 * (sin(2) * 12 - 45 + 4) / 2, 1e-6);
+      result, log10(32 + 1) * 7 / 11 * 432 * (sin(2) * 12 - .45 + 4) / 2, 1e-6);
 }
 END_TEST
 
@@ -188,6 +207,7 @@ Suite* calculator_suite(void) {
 
   // Тесты для калькуляции
   ADD_TEST(tc_core, test_calculate_1);
+  ADD_TEST(tc_core, test_validate_string);
   ADD_TEST(tc_core, test_calculate_2);
   ADD_TEST(tc_core, test_calculate_3);
   ADD_TEST(tc_core, test_calculate_4);

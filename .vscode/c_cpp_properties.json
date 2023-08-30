@@ -3,7 +3,8 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/usr/local/include/isl"
             ],
             "defines": [],
             "macFrameworkPath": [
@@ -12,7 +13,7 @@
             "cStandard": "c11",
             "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-arm64",
-            "compilerPath": "/usr/bin/gcc"
+            "compilerPath": "/usr/local/bin/gcc-11"
         }
     ],
     "version": 4
