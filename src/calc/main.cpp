@@ -22,14 +22,17 @@ int main(int argc, char *argv[]) {
     mainWindow.setWindowTitle("Qt Калькулятор");
     mainWindow.resize(1200, 600);
 
-    QSplitter *splitter = new QSplitter(Qt::Horizontal, &mainWindow);
+    QWidget *mainWidget = new QWidget(&mainWindow);
+    QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
+
+    QSplitter *splitter = new QSplitter(Qt::Horizontal, mainWidget);
 
     QWidget *calculatorWidget = new QWidget(splitter);
-    QVBoxLayout *mainLayout = new QVBoxLayout(calculatorWidget);
+    QVBoxLayout *calculatorLayout = new QVBoxLayout(calculatorWidget);
 
     QLineEdit *lineEdit = new QLineEdit(calculatorWidget);
     lineEdit->setPlaceholderText("Введите выражение");
-    mainLayout->addWidget(lineEdit);
+    calculatorLayout->addWidget(lineEdit);
 
     auto closeParenthesisIfNeeded = [](QString expression) -> QString {
         int openCount = expression.count('(');
@@ -105,11 +108,11 @@ int main(int argc, char *argv[]) {
     }
     extraBox->setLayout(extraLayout);
 
-    mainLayout->addWidget(basicBox);
-    mainLayout->addWidget(trigBox);
-    mainLayout->addWidget(extraBox);
-    calculatorWidget->setLayout(mainLayout);
+    calculatorLayout->addWidget(basicBox);
+    calculatorLayout->addWidget(trigBox);
+    calculatorLayout->addWidget(extraBox);
 
+    calculatorWidget->setLayout(calculatorLayout);
     splitter->addWidget(calculatorWidget);
 
     QWidget *graphWidget = new QWidget(splitter);
@@ -127,11 +130,13 @@ QObject::connect(plotButton, &QPushButton::clicked, [&]() {
     int numPoints = 2000;
     QVector<double> x(numPoints), y(numPoints);
     double step = (2 * M_PI) / numPoints;
+    double tanLimit = 20.0;  // предельное значение для tan(x)
+
+    QVector<QVector<double>> allXs, allYs;
+    QVector<double> currentXs, currentYs;
 
     for(int i=0; i<numPoints; i++) {
         x[i] = i * step - 0.1 * M_PI;
-
-        // Если x близко к нулю, устанавливаем его равным 0
         if (std::abs(x[i]) < 1e-15) {
             x[i] = 0.0;
         }
@@ -139,31 +144,74 @@ QObject::connect(plotButton, &QPushButton::clicked, [&]() {
         QString currentExpr = baseExpr;
         currentExpr.replace("x", "%1");
         currentExpr = currentExpr.arg(x[i]);
-
         y[i] = calculate(currentExpr.toStdString().c_str());
+
+        if (baseExpr.contains("tan", Qt::CaseInsensitive)) {
+            if (y[i] > tanLimit) {
+                y[i] = tanLimit;
+                if (!currentXs.isEmpty()) {
+                    allXs.append(currentXs);
+                    allYs.append(currentYs);
+                    currentXs.clear();
+                    currentYs.clear();
+                }
+                continue;
+            } else if (y[i] < -tanLimit) {
+                y[i] = -tanLimit;
+                if (!currentXs.isEmpty()) {
+                    allXs.append(currentXs);
+                    allYs.append(currentYs);
+                    currentXs.clear();
+                    currentYs.clear();
+                }
+                continue;
+            }
+        }
+
+        currentXs.append(x[i]);
+        currentYs.append(y[i]);
     }
 
+    if (!currentXs.isEmpty()) {
+        allXs.append(currentXs);
+        allYs.append(currentYs);
+    }
 
+    for (int i = 0; i < allXs.size(); i++) {
+        plot->addGraph();
+        plot->graph(i)->setData(allXs[i], allYs[i]);
+    }
 
-    plot->addGraph();
-    plot->graph(0)->setData(x, y);
     plot->xAxis->setRange(-10 * M_PI, 10 * M_PI);
     plot->yAxis->setRange(-2, 2);
     plot->rescaleAxes(true);
     plot->replot();
 });
 
-
-
-
     graphLayout->addWidget(graphExpression);
     graphLayout->addWidget(plotButton);
     graphLayout->addWidget(plot);
-
     graphWidget->setLayout(graphLayout);
     splitter->addWidget(graphWidget);
+    graphWidget->hide();
 
-    mainWindow.setCentralWidget(splitter);
+    mainLayout->addWidget(splitter);
+
+    QPushButton *toggleGraphButton = new QPushButton("Построить график", mainWidget);
+    mainLayout->addWidget(toggleGraphButton);
+
+    QObject::connect(toggleGraphButton, &QPushButton::clicked, [&]() {
+        if (graphWidget->isVisible()) {
+            graphWidget->hide();
+            toggleGraphButton->setText("Построить график");
+        } else {
+            graphWidget->show();
+            toggleGraphButton->setText("Скрыть график");
+        }
+    });
+
+    mainWidget->setLayout(mainLayout);
+    mainWindow.setCentralWidget(mainWidget);
     mainWindow.show();
 
     return app.exec();
