@@ -54,15 +54,19 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../func/stack.c \
 		../func/validator.c \
+		../calc/creditcalculatorwindow.cpp \
 		../calc/main.cpp \
 		../calc/mainwindow.cpp \
-		../calc/qcustomplot.cpp moc_mainwindow.cpp \
+		../calc/qcustomplot.cpp moc_creditcalculatorwindow.cpp \
+		moc_mainwindow.cpp \
 		moc_qcustomplot.cpp
 OBJECTS       = stack.o \
 		validator.o \
+		creditcalculatorwindow.o \
 		main.o \
 		mainwindow.o \
 		qcustomplot.o \
+		moc_creditcalculatorwindow.o \
 		moc_mainwindow.o \
 		moc_qcustomplot.o
 DIST          = /opt/homebrew/share/qt/mkspecs/features/spec_pre.prf \
@@ -366,9 +370,11 @@ DIST          = /opt/homebrew/share/qt/mkspecs/features/spec_pre.prf \
 		/opt/homebrew/share/qt/mkspecs/features/exceptions.prf \
 		/opt/homebrew/share/qt/mkspecs/features/yacc.prf \
 		/opt/homebrew/share/qt/mkspecs/features/lex.prf \
-		../calc/calc.pro ../calc/mainwindow.h \
+		../calc/calc.pro ../calc/creditcalculatorwindow.h \
+		../calc/mainwindow.h \
 		../calc/qcustomplot.h ../func/stack.c \
 		../func/validator.c \
+		../calc/creditcalculatorwindow.cpp \
 		../calc/main.cpp \
 		../calc/mainwindow.cpp \
 		../calc/qcustomplot.cpp
@@ -1034,8 +1040,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/homebrew/share/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../calc/mainwindow.h ../calc/qcustomplot.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../func/stack.c ../func/validator.c ../calc/main.cpp ../calc/mainwindow.cpp ../calc/qcustomplot.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../calc/creditcalculatorwindow.h ../calc/mainwindow.h ../calc/qcustomplot.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../func/stack.c ../func/validator.c ../calc/creditcalculatorwindow.cpp ../calc/main.cpp ../calc/mainwindow.cpp ../calc/qcustomplot.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../calc/mainwindow.ui $(DISTDIR)/
 
 
@@ -1071,9 +1077,18 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /opt/homebrew/share/qt/mkspecs/features/data/dummy.cpp
 	/Library/Developer/CommandLineTools/usr/bin/clang++ -pipe -stdlib=libc++ -g -std=gnu++1z $(EXPORT_ARCH_ARGS) -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -mmacosx-version-min=13.0 -Wall -Wextra -dM -E -o moc_predefs.h /opt/homebrew/share/qt/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_qcustomplot.cpp
+compiler_moc_header_make_all: moc_creditcalculatorwindow.cpp moc_mainwindow.cpp moc_qcustomplot.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_qcustomplot.cpp
+	-$(DEL_FILE) moc_creditcalculatorwindow.cpp moc_mainwindow.cpp moc_qcustomplot.cpp
+moc_creditcalculatorwindow.cpp: ../calc/creditcalculatorwindow.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QMainWindow \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QPushButton \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		moc_predefs.h \
+		/opt/homebrew/share/qt/libexec/moc
+	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/fatkheev/Yandex.Disk.localized/GITHUB/SmartCalc/src/build-calc-Desktop_arm_darwin_generic_mach_o_64bit-Debug/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/fatkheev/Yandex.Disk.localized/GITHUB/SmartCalc/src/calc -I/opt/homebrew/lib/QtPrintSupport.framework/Headers -I/opt/homebrew/lib/QtWidgets.framework/Headers -I/opt/homebrew/lib/QtGui.framework/Headers -I/opt/homebrew/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/14.0.3/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/opt/homebrew/lib ../calc/creditcalculatorwindow.h -o moc_creditcalculatorwindow.cpp
+
 moc_mainwindow.cpp: ../calc/mainwindow.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/QMainWindow \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qmainwindow.h \
@@ -1118,6 +1133,15 @@ stack.o: ../func/stack.c ../stack.h
 validator.o: ../func/validator.c ../stack.h
 	$(CC) -c $(CFLAGS) $(INCPATH) -o validator.o ../func/validator.c
 
+creditcalculatorwindow.o: ../calc/creditcalculatorwindow.cpp ../calc/creditcalculatorwindow.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QMainWindow \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QPushButton \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qboxlayout.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o creditcalculatorwindow.o ../calc/creditcalculatorwindow.cpp
+
 main.o: ../calc/main.cpp /opt/homebrew/lib/QtWidgets.framework/Headers/QApplication \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qapplication.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/QMainWindow \
@@ -1139,7 +1163,8 @@ main.o: ../calc/main.cpp /opt/homebrew/lib/QtWidgets.framework/Headers/QApplicat
 		../calc/qcustomplot.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/qmath.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/qnumeric.h \
-		/opt/homebrew/lib/QtCore.framework/Headers/QtNumeric
+		/opt/homebrew/lib/QtCore.framework/Headers/QtNumeric \
+		../calc/creditcalculatorwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../calc/main.cpp
 
 mainwindow.o: ../calc/mainwindow.cpp ../calc/mainwindow.h \
@@ -1153,6 +1178,9 @@ qcustomplot.o: ../calc/qcustomplot.cpp ../calc/qcustomplot.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/qnumeric.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/QtNumeric
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qcustomplot.o ../calc/qcustomplot.cpp
+
+moc_creditcalculatorwindow.o: moc_creditcalculatorwindow.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_creditcalculatorwindow.o moc_creditcalculatorwindow.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

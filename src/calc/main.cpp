@@ -9,6 +9,7 @@
 #include <QSplitter>
 #include <cmath>
 #include "qcustomplot.h"
+#include "creditcalculatorwindow.h"
 
 extern "C" {
 bool validate_string(const char* str);
@@ -24,6 +25,7 @@ int main(int argc, char *argv[]) {
 
     QWidget *mainWidget = new QWidget(&mainWindow);
     QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
+
 
     QSplitter *splitter = new QSplitter(Qt::Horizontal, mainWidget);
 
@@ -210,8 +212,29 @@ QObject::connect(plotButton, &QPushButton::clicked, [&]() {
         }
     });
 
+    QPushButton *toggleCreditCalculatorButton = new QPushButton("Кредитный калькулятор", mainWidget);
+    mainLayout->addWidget(toggleCreditCalculatorButton);
+
     mainWidget->setLayout(mainLayout);
     mainWindow.setCentralWidget(mainWidget);
+
+    CreditCalculatorWindow creditCalculator;
+    QObject::connect(&creditCalculator, &CreditCalculatorWindow::switchToMainCalculator, [&]() {
+        creditCalculator.hide();
+        mainWindow.show();
+    });
+
+    QObject::connect(toggleCreditCalculatorButton, &QPushButton::clicked, [&]() {
+        if (graphWidget->isVisible()) {
+            graphWidget->hide();
+            toggleGraphButton->setText("Построить график");
+        }
+        mainWindow.hide();
+        creditCalculator.show();
+    });
+
+
+
     mainWindow.show();
 
     return app.exec();
