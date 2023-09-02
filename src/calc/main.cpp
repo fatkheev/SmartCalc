@@ -1,20 +1,6 @@
-#include <QApplication>
-#include <QMainWindow>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QGridLayout>
-#include <QVBoxLayout>
-#include <QGroupBox>
-#include <QWidget>
-#include <QSplitter>
-#include <cmath>
 #include "qcustomplot.h"
 #include "creditcalculatorwindow.h"
-
-extern "C" {
-bool validate_string(const char* str);
-double calculate(const char* infixExpression);
-}
+#include "mainwindow.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);

@@ -1,8 +1,7 @@
 #ifndef CREDITCALCULATORWINDOW_H
 #define CREDITCALCULATORWINDOW_H
 
-#include <QMainWindow>
-#include <QPushButton>
+#include "mainwindow.h"
 
 class CreditCalculatorWindow : public QMainWindow {
     Q_OBJECT
