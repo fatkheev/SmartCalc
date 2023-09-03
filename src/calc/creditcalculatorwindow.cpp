@@ -60,6 +60,16 @@ CreditCalculatorWindow::CreditCalculatorWindow(QWidget *parent) : QMainWindow(pa
     this->setCentralWidget(centralWidget);
 }
 
+void CreditCalculatorWindow::insertTableRow(int row, double monthlyPayment, double principalPayment, double interestPayment, double balanceOwed) {
+    table->insertRow(row);
+    table->setItem(row, 0, new QTableWidgetItem(QString::number(row + 1)));
+    table->setItem(row, 1, new QTableWidgetItem(QString("Month %1").arg(row + 1)));
+    table->setItem(row, 2, new QTableWidgetItem(QString::number(monthlyPayment, 'f', 2)));
+    table->setItem(row, 3, new QTableWidgetItem(QString::number(principalPayment, 'f', 2)));
+    table->setItem(row, 4, new QTableWidgetItem(QString::number(interestPayment, 'f', 2)));
+    table->setItem(row, 5, new QTableWidgetItem(QString::number(balanceOwed, 'f', 2)));
+}
+
 void CreditCalculatorWindow::calculate() {
     double loanAmount = round(loanInput->text().toDouble() * 100) / 100;
     int months = monthsInput->text().toInt();
@@ -67,10 +77,10 @@ void CreditCalculatorWindow::calculate() {
     double monthlyRate = annualRate / 12.0 / 100.0;
     QString paymentType = typeCombo->currentText();
 
-    disconnect(table, &QTableWidget::cellClicked, nullptr, nullptr); // Отключаем предыдущий обработчик события
+    disconnect(table, &QTableWidget::cellClicked, nullptr, nullptr);
     table->setRowCount(0);
     hiddenRows.clear();
-    if (showAllButtonRow != -1) { // Удаляем строку с кнопкой "Показать все строки", если она существует
+    if (showAllButtonRow != -1) {
         table->removeRow(showAllButtonRow);
         showAllButtonRow = -1;
     }
@@ -83,16 +93,9 @@ void CreditCalculatorWindow::calculate() {
         for (int i = 0; i < months; ++i) {
             double interestPayment = round((balanceOwed * monthlyRate) * 100) / 100;
             double principalPayment = monthlyPayment - interestPayment;
-
             balanceOwed = round((balanceOwed - principalPayment) * 100) / 100;
 
-            table->insertRow(table->rowCount());
-            table->setItem(table->rowCount() - 1, 0, new QTableWidgetItem(QString::number(i + 1)));
-            table->setItem(table->rowCount() - 1, 1, new QTableWidgetItem(QString("Month %1").arg(i + 1)));
-            table->setItem(table->rowCount() - 1, 2, new QTableWidgetItem(QString::number(monthlyPayment, 'f', 2)));
-            table->setItem(table->rowCount() - 1, 3, new QTableWidgetItem(QString::number(principalPayment, 'f', 2)));
-            table->setItem(table->rowCount() - 1, 4, new QTableWidgetItem(QString::number(interestPayment, 'f', 2)));
-            table->setItem(table->rowCount() - 1, 5, new QTableWidgetItem(QString::number(balanceOwed, 'f', 2)));
+            insertTableRow(i, monthlyPayment, principalPayment, interestPayment, balanceOwed);
         }
     } else if (paymentType == "Дифференцированный") {
         double principalPayment = loanAmount / months;
@@ -103,25 +106,17 @@ void CreditCalculatorWindow::calculate() {
             double monthlyPayment = principalPayment + interestPayment;
             balanceOwed = balanceOwed - principalPayment;
 
-            table->insertRow(table->rowCount());
-            table->setItem(table->rowCount() - 1, 0, new QTableWidgetItem(QString::number(i + 1)));
-            table->setItem(table->rowCount() - 1, 1, new QTableWidgetItem(QString("Month %1").arg(i + 1)));
-            table->setItem(table->rowCount() - 1, 2, new QTableWidgetItem(QString::number(round(monthlyPayment * 100) / 100, 'f', 2)));
-            table->setItem(table->rowCount() - 1, 3, new QTableWidgetItem(QString::number(round(principalPayment * 100) / 100, 'f', 2)));
-            table->setItem(table->rowCount() - 1, 4, new QTableWidgetItem(QString::number(round(interestPayment * 100) / 100, 'f', 2)));
-            table->setItem(table->rowCount() - 1, 5, new QTableWidgetItem(QString::number(round(balanceOwed * 100) / 100, 'f', 2)));
+            if (balanceOwed < 0) balanceOwed = 0;
 
+            insertTableRow(i, monthlyPayment, principalPayment, interestPayment, balanceOwed);
         }
     }
 
     if (months > 120) {
-        // Скрываем все строки, кроме первых и последних пяти месяцев
         for (int i = 5; i < months - 5; ++i) {
             table->hideRow(i);
             hiddenRows.push_back(i);
         }
-
-        // Добавляем строку с кнопкой "Показать все строки" после пятого месяца
         table->insertRow(5);
         showAllButtonRow = 5;
         QTableWidgetItem *showAllItem = new QTableWidgetItem("Показать все строки");
@@ -129,7 +124,6 @@ void CreditCalculatorWindow::calculate() {
         table->setItem(showAllButtonRow, 0, showAllItem);
         table->setSpan(showAllButtonRow, 0, 1, table->columnCount());
 
-        // Подключаем событие, чтобы показать все строки при клике
         connect(table, &QTableWidget::cellClicked, [=](int row, int) {
             if (row == showAllButtonRow) {
                 showAllRows();
@@ -138,15 +132,13 @@ void CreditCalculatorWindow::calculate() {
     }
 }
 
-
 void CreditCalculatorWindow::showAllRows() {
-    for (const auto& row : hiddenRows) {
+    for (int row : hiddenRows) {
         table->showRow(row);
     }
-    if (showAllButtonRow != -1) {
-        table->hideRow(showAllButtonRow);
-    }
+    table->removeRow(showAllButtonRow);
     hiddenRows.clear();
+    showAllButtonRow = -1;
 }
 
 void CreditCalculatorWindow::handleBackButton() {

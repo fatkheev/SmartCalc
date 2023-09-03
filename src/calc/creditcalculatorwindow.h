@@ -19,6 +19,7 @@ private slots:
     void calculate();
     void showAllRows();
     void handleBackButton();
+    void insertTableRow(int row, double monthlyPayment, double principalPayment, double interestPayment, double balanceOwed);
 
 signals:
     void switchToMainCalculator();

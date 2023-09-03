@@ -44,17 +44,29 @@ static constexpr auto qt_meta_stringdata_CLASSCreditCalculatorWindowENDCLASS = Q
     "",
     "calculate",
     "showAllRows",
-    "handleBackButton"
+    "handleBackButton",
+    "insertTableRow",
+    "row",
+    "monthlyPayment",
+    "principalPayment",
+    "interestPayment",
+    "balanceOwed"
 );
 #else  // !QT_MOC_HAS_STRING_DATA
 struct qt_meta_stringdata_CLASSCreditCalculatorWindowENDCLASS_t {
-    uint offsetsAndSizes[12];
+    uint offsetsAndSizes[24];
     char stringdata0[23];
     char stringdata1[23];
     char stringdata2[1];
     char stringdata3[10];
     char stringdata4[12];
     char stringdata5[17];
+    char stringdata6[15];
+    char stringdata7[4];
+    char stringdata8[15];
+    char stringdata9[17];
+    char stringdata10[16];
+    char stringdata11[12];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_CLASSCreditCalculatorWindowENDCLASS_t::offsetsAndSizes) + ofs), len 
@@ -65,14 +77,26 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSCreditCalculatorWindowENDCLASS_
         QT_MOC_LITERAL(46, 0),  // ""
         QT_MOC_LITERAL(47, 9),  // "calculate"
         QT_MOC_LITERAL(57, 11),  // "showAllRows"
-        QT_MOC_LITERAL(69, 16)   // "handleBackButton"
+        QT_MOC_LITERAL(69, 16),  // "handleBackButton"
+        QT_MOC_LITERAL(86, 14),  // "insertTableRow"
+        QT_MOC_LITERAL(101, 3),  // "row"
+        QT_MOC_LITERAL(105, 14),  // "monthlyPayment"
+        QT_MOC_LITERAL(120, 16),  // "principalPayment"
+        QT_MOC_LITERAL(137, 15),  // "interestPayment"
+        QT_MOC_LITERAL(153, 11)   // "balanceOwed"
     },
     "CreditCalculatorWindow",
     "switchToMainCalculator",
     "",
     "calculate",
     "showAllRows",
-    "handleBackButton"
+    "handleBackButton",
+    "insertTableRow",
+    "row",
+    "monthlyPayment",
+    "principalPayment",
+    "interestPayment",
+    "balanceOwed"
 };
 #undef QT_MOC_LITERAL
 #endif // !QT_MOC_HAS_STRING_DATA
@@ -84,7 +108,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSCreditCalculatorWindowENDCLASS[]
       11,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -92,12 +116,13 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSCreditCalculatorWindowENDCLASS[]
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   38,    2, 0x06,    1 /* Public */,
+       1,    0,   44,    2, 0x06,    1 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       3,    0,   39,    2, 0x08,    2 /* Private */,
-       4,    0,   40,    2, 0x08,    3 /* Private */,
-       5,    0,   41,    2, 0x08,    4 /* Private */,
+       3,    0,   45,    2, 0x08,    2 /* Private */,
+       4,    0,   46,    2, 0x08,    3 /* Private */,
+       5,    0,   47,    2, 0x08,    4 /* Private */,
+       6,    5,   48,    2, 0x08,    5 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -106,6 +131,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSCreditCalculatorWindowENDCLASS[]
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Int, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,    7,    8,    9,   10,   11,
 
        0        // eod
 };
@@ -126,7 +152,14 @@ Q_CONSTINIT const QMetaObject CreditCalculatorWindow::staticMetaObject = { {
         // method 'showAllRows'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'handleBackButton'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'insertTableRow'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>
     >,
     nullptr
 } };
@@ -141,6 +174,7 @@ void CreditCalculatorWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _
         case 1: _t->calculate(); break;
         case 2: _t->showAllRows(); break;
         case 3: _t->handleBackButton(); break;
+        case 4: _t->insertTableRow((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -153,7 +187,6 @@ void CreditCalculatorWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _
             }
         }
     }
-    (void)_a;
 }
 
 const QMetaObject *CreditCalculatorWindow::metaObject() const
@@ -175,13 +208,13 @@ int CreditCalculatorWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 5;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 5)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
 }
