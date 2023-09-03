@@ -1,18 +1,37 @@
 #ifndef CREDITCALCULATORWINDOW_H
 #define CREDITCALCULATORWINDOW_H
 
-#include "mainwindow.h"
+#include <QMainWindow>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QTableWidget>
+#include <QPushButton>
+#include <QList>
 
-class CreditCalculatorWindow : public QMainWindow {
+class CreditCalculatorWindow : public QMainWindow
+{
     Q_OBJECT
+
 public:
-    explicit CreditCalculatorWindow(QWidget *parent = nullptr);
+    CreditCalculatorWindow(QWidget *parent = nullptr);
+
+private slots:
+    void calculate();
+    void showAllRows();
+    void handleBackButton();
 
 signals:
     void switchToMainCalculator();
 
-private slots:
-    void handleBackButton();
+private:
+    QLineEdit *loanInput;
+    QLineEdit *monthsInput;
+    QLineEdit *rateInput;
+    QComboBox *typeCombo;
+    QTableWidget *table;
+    QPushButton *showAllButton;
+    QList<int> hiddenRows;
+    int showAllButtonRow;
 };
 
 #endif // CREDITCALCULATORWINDOW_H
