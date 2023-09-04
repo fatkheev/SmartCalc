@@ -20,6 +20,13 @@ int main(int argc, char *argv[]) {
 
     QLineEdit *lineEdit = new QLineEdit(calculatorWidget);
     lineEdit->setPlaceholderText("Введите выражение");
+
+    QObject::connect(lineEdit, &QLineEdit::textChanged, [lineEdit]() {
+        if (lineEdit->text().length() > 255) {
+            lineEdit->setText("Ошибка: превышен лимит символов");
+        }
+    });
+
     calculatorLayout->addWidget(lineEdit);
 
     auto closeParenthesisIfNeeded = [](QString expression) -> QString {
@@ -45,6 +52,10 @@ int main(int argc, char *argv[]) {
             if (btn->text() == "C") {
                 lineEdit->clear();
             } else if (btn->text() == "=") {
+                if (lineEdit->text().isEmpty()) {
+                    // Если строка пуста, ничего не делать
+                    return;
+                }
                 QString expression = closeParenthesisIfNeeded(lineEdit->text());
 
                 if (!validate_string(expression.toStdString().c_str())) {
@@ -107,6 +118,7 @@ int main(int argc, char *argv[]) {
     QVBoxLayout *graphLayout = new QVBoxLayout(graphWidget);
 
     QCustomPlot *plot = new QCustomPlot(graphWidget);
+    graphLayout->addWidget(plot);
     QLineEdit *graphExpression = new QLineEdit(graphWidget);
     graphExpression->setPlaceholderText("Введите функцию для графика");
     QPushButton *plotButton = new QPushButton("График", graphWidget);
