@@ -34,7 +34,12 @@ bool validate_string(const char* str) {
       if (j >= 0 &&
           isOperator(
               str[j])) {  // Проверка на наличие другого оператора перед текущим
-        return false;
+        // Разрешить комбинации "/-", "*-", "*+"
+        if (!((str[j] == '/' && str[i] == '-') ||
+              (str[j] == '*' && str[i] == '-') ||
+              (str[j] == '*' && str[i] == '+'))) {
+          return false;
+        }
       }
     }
 

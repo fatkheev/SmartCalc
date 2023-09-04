@@ -12,7 +12,6 @@ int main(int argc, char *argv[]) {
     QWidget *mainWidget = new QWidget(&mainWindow);
     QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
 
-
     QSplitter *splitter = new QSplitter(Qt::Horizontal, mainWidget);
 
     QWidget *calculatorWidget = new QWidget(splitter);
@@ -20,14 +19,17 @@ int main(int argc, char *argv[]) {
 
     QLineEdit *lineEdit = new QLineEdit(calculatorWidget);
     lineEdit->setPlaceholderText("Введите выражение");
+    QLineEdit *xValueLineEdit = new QLineEdit(calculatorWidget);
+    xValueLineEdit->setPlaceholderText("x =");
+
+    calculatorLayout->addWidget(lineEdit);
+    calculatorLayout->addWidget(xValueLineEdit);
 
     QObject::connect(lineEdit, &QLineEdit::textChanged, [lineEdit]() {
         if (lineEdit->text().length() > 255) {
             lineEdit->setText("Ошибка: превышен лимит символов");
         }
     });
-
-    calculatorLayout->addWidget(lineEdit);
 
     auto closeParenthesisIfNeeded = [](QString expression) -> QString {
         int openCount = expression.count('(');
@@ -43,20 +45,25 @@ int main(int argc, char *argv[]) {
     QStringList basicButtons = {"7", "8", "9", "+",
                                 "4", "5", "6", "-",
                                 "1", "2", "3", "*",
-                                "0", "C", "/", "="};
+                                "0", "C", "/", "=",
+                                "x", "^"};
 
     for (int i = 0; i < basicButtons.size(); ++i) {
         QPushButton *btn = new QPushButton(basicButtons[i], calculatorWidget);
         basicLayout->addWidget(btn, i / 4, i % 4);
-        QObject::connect(btn, &QPushButton::clicked, [lineEdit, btn, &closeParenthesisIfNeeded]() {
+        QObject::connect(btn, &QPushButton::clicked, [lineEdit, xValueLineEdit, btn, &closeParenthesisIfNeeded]() {
             if (btn->text() == "C") {
                 lineEdit->clear();
             } else if (btn->text() == "=") {
                 if (lineEdit->text().isEmpty()) {
-                    // Если строка пуста, ничего не делать
                     return;
                 }
                 QString expression = closeParenthesisIfNeeded(lineEdit->text());
+
+                if (!xValueLineEdit->text().isEmpty()) {
+                    QString xValue = xValueLineEdit->text();
+                    expression.replace("x", xValue);
+                }
 
                 if (!validate_string(expression.toStdString().c_str())) {
                     lineEdit->setText("Ошибка");
@@ -74,6 +81,7 @@ int main(int argc, char *argv[]) {
             }
         });
     }
+
     basicBox->setLayout(basicLayout);
 
     QGroupBox *trigBox = new QGroupBox("Тригонометрия");
@@ -114,101 +122,110 @@ int main(int argc, char *argv[]) {
     calculatorWidget->setLayout(calculatorLayout);
     splitter->addWidget(calculatorWidget);
 
-    QWidget *graphWidget = new QWidget(splitter);
+QWidget *graphWidget = new QWidget(splitter);
     QVBoxLayout *graphLayout = new QVBoxLayout(graphWidget);
+
+QHBoxLayout *xRangeLayout = new QHBoxLayout;
+QHBoxLayout *yRangeLayout = new QHBoxLayout;
+
+QLineEdit *xMinLineEdit = new QLineEdit(graphWidget);
+QLineEdit *xMaxLineEdit = new QLineEdit(graphWidget);
+QLineEdit *yMinLineEdit = new QLineEdit(graphWidget);
+QLineEdit *yMaxLineEdit = new QLineEdit(graphWidget);
+
+QLabel *xMinLabel = new QLabel("x Min:", graphWidget);
+QLabel *xMaxLabel = new QLabel("x Max:", graphWidget);
+QLabel *yMinLabel = new QLabel("y Min:", graphWidget);
+QLabel *yMaxLabel = new QLabel("y Max:", graphWidget);
+
+xRangeLayout->addWidget(xMinLabel);
+xRangeLayout->addWidget(xMinLineEdit);
+xRangeLayout->addWidget(xMaxLabel);
+xRangeLayout->addWidget(xMaxLineEdit);
+
+yRangeLayout->addWidget(yMinLabel);
+yRangeLayout->addWidget(yMinLineEdit);
+yRangeLayout->addWidget(yMaxLabel);
+yRangeLayout->addWidget(yMaxLineEdit);
+
+graphLayout->addLayout(xRangeLayout);
+graphLayout->addLayout(yRangeLayout);
+
 
     QCustomPlot *plot = new QCustomPlot(graphWidget);
     graphLayout->addWidget(plot);
-    QLineEdit *graphExpression = new QLineEdit(graphWidget);
-    graphExpression->setPlaceholderText("Введите функцию для графика");
     QPushButton *plotButton = new QPushButton("График", graphWidget);
 
-QObject::connect(plotButton, &QPushButton::clicked, [&]() {
-    plot->clearGraphs();
-    QString baseExpr = graphExpression->text();
+    QObject::connect(plotButton, &QPushButton::clicked, [&]() {
 
-    int numPoints = 2000;
-    QVector<double> x(numPoints), y(numPoints);
-    double step = (2 * M_PI) / numPoints;
-    double tanLimit = 20.0;  // предельное значение для tan(x)
+        // Чтение и установка диапазонов осей x и y
+        double xMin = xMinLineEdit->text().isEmpty() ? -M_PI : xMinLineEdit->text().toDouble();
+        double xMax = xMaxLineEdit->text().isEmpty() ? M_PI : xMaxLineEdit->text().toDouble();
+        double yMin = yMinLineEdit->text().isEmpty() ? -2 : yMinLineEdit->text().toDouble();
+        double yMax = yMaxLineEdit->text().isEmpty() ? 2 : yMaxLineEdit->text().toDouble();
 
-    QVector<QVector<double>> allXs, allYs;
-    QVector<double> currentXs, currentYs;
+        plot->clearGraphs();
+        QString baseExpr = lineEdit->text();  // Используем lineEdit вместо graphExpression
 
-    for(int i=0; i<numPoints; i++) {
-        x[i] = i * step - 0.1 * M_PI;
-        if (std::abs(x[i]) < 1e-15) {
-            x[i] = 0.0;
-        }
+        int numPoints = 2000;
+        QVector<double> x(numPoints), y(numPoints);
+        double step = (xMax - xMin) / numPoints;
+        double tanLimit = 20.0;  // предельное значение для tan(x)
 
-        QString currentExpr = baseExpr;
-        currentExpr.replace("x", "%1");
-        currentExpr = currentExpr.arg(x[i]);
-        y[i] = calculate(currentExpr.toStdString().c_str());
+        QVector<QVector<double>> allXs, allYs;
+        QVector<double> currentXs, currentYs;
 
-        if (baseExpr.contains("tan", Qt::CaseInsensitive)) {
-            if (y[i] > tanLimit) {
-                y[i] = tanLimit;
+        for(int i = 0; i < numPoints; i++) {
+            x[i] = i * step + xMin;
+            if (std::abs(x[i]) < 1e-15) {
+                x[i] = 0.0;
+            }
+
+            QString currentExpr = baseExpr;
+            currentExpr.replace("x", "%1");
+            currentExpr = currentExpr.arg(x[i]);
+            y[i] = calculate(currentExpr.toStdString().c_str());
+
+            // Здесь добавляем проверку на "разрыв"
+            if (std::abs(y[i]) > tanLimit) {
                 if (!currentXs.isEmpty()) {
                     allXs.append(currentXs);
                     allYs.append(currentYs);
-                    currentXs.clear();
-                    currentYs.clear();
                 }
-                continue;
-            } else if (y[i] < -tanLimit) {
-                y[i] = -tanLimit;
-                if (!currentXs.isEmpty()) {
-                    allXs.append(currentXs);
-                    allYs.append(currentYs);
-                    currentXs.clear();
-                    currentYs.clear();
-                }
+                currentXs.clear();
+                currentYs.clear();
                 continue;
             }
+
+            currentXs.append(x[i]);
+            currentYs.append(y[i]);
         }
 
-        currentXs.append(x[i]);
-        currentYs.append(y[i]);
-    }
+        if (!currentXs.isEmpty()) {
+            allXs.append(currentXs);
+            allYs.append(currentYs);
+        }
 
-    if (!currentXs.isEmpty()) {
-        allXs.append(currentXs);
-        allYs.append(currentYs);
-    }
+        for (int i = 0; i < allXs.size(); i++) {
+            plot->addGraph();
+            plot->graph(i)->setData(allXs[i], allYs[i]);
+        }
 
-    for (int i = 0; i < allXs.size(); i++) {
-        plot->addGraph();
-        plot->graph(i)->setData(allXs[i], allYs[i]);
-    }
+        plot->xAxis->setRange(xMin, xMax);
+        plot->yAxis->setRange(yMin, yMax);
+        plot->replot();
+    });
 
-    plot->xAxis->setRange(-20 * M_PI, 20 * M_PI);
-    plot->yAxis->setRange(-2, 2);
-    plot->rescaleAxes(true);
-    plot->replot();
-});
-
-    graphLayout->addWidget(graphExpression);
     graphLayout->addWidget(plotButton);
     graphLayout->addWidget(plot);
     graphWidget->setLayout(graphLayout);
     splitter->addWidget(graphWidget);
-    graphWidget->hide();
+
+    QList<int> sizes;
+    sizes << 300 << 900; // Здесь 300 и 900 - это ширины виджетов в пикселях.
+    splitter->setSizes(sizes);
 
     mainLayout->addWidget(splitter);
-
-    QPushButton *toggleGraphButton = new QPushButton("Построить график", mainWidget);
-    mainLayout->addWidget(toggleGraphButton);
-
-    QObject::connect(toggleGraphButton, &QPushButton::clicked, [&]() {
-        if (graphWidget->isVisible()) {
-            graphWidget->hide();
-            toggleGraphButton->setText("Построить график");
-        } else {
-            graphWidget->show();
-            toggleGraphButton->setText("Скрыть график");
-        }
-    });
 
     QPushButton *toggleCreditCalculatorButton = new QPushButton("Кредитный калькулятор", mainWidget);
     mainLayout->addWidget(toggleCreditCalculatorButton);
@@ -223,15 +240,9 @@ QObject::connect(plotButton, &QPushButton::clicked, [&]() {
     });
 
     QObject::connect(toggleCreditCalculatorButton, &QPushButton::clicked, [&]() {
-        if (graphWidget->isVisible()) {
-            graphWidget->hide();
-            toggleGraphButton->setText("Построить график");
-        }
         mainWindow.hide();
         creditCalculator.show();
     });
-
-
 
     mainWindow.show();
 

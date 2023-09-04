@@ -63,7 +63,7 @@ CreditCalculatorWindow::CreditCalculatorWindow(QWidget *parent) : QMainWindow(pa
 void CreditCalculatorWindow::insertTableRow(int row, double monthlyPayment, double principalPayment, double interestPayment, double balanceOwed) {
     table->insertRow(row);
     table->setItem(row, 0, new QTableWidgetItem(QString::number(row + 1)));
-    table->setItem(row, 1, new QTableWidgetItem(QString("Month %1").arg(row + 1)));
+    table->setItem(row, 1, new QTableWidgetItem(QString("Месяц %1").arg(row + 1)));
     table->setItem(row, 2, new QTableWidgetItem(QString::number(monthlyPayment, 'f', 2)));
     table->setItem(row, 3, new QTableWidgetItem(QString::number(principalPayment, 'f', 2)));
     table->setItem(row, 4, new QTableWidgetItem(QString::number(interestPayment, 'f', 2)));
