@@ -182,7 +182,7 @@ QObject::connect(plotButton, &QPushButton::clicked, [&]() {
         plot->graph(i)->setData(allXs[i], allYs[i]);
     }
 
-    plot->xAxis->setRange(-10 * M_PI, 10 * M_PI);
+    plot->xAxis->setRange(-20 * M_PI, 20 * M_PI);
     plot->yAxis->setRange(-2, 2);
     plot->rescaleAxes(true);
     plot->replot();
