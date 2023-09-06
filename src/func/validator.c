@@ -3,12 +3,21 @@
 bool validate_string(const char* str) {
   int open_parentheses = 0;
   int close_parentheses = 0;
+  int dot_count = 0;
 
   if (str[0] == ')') {
     return false;
   }
 
   for (int i = 0; str[i]; i++) {
+    if (str[i] == ' ' || isOperator(str[i])) {
+      dot_count = 0;
+    }
+
+    if (dot_count > 1) {
+      return false;
+    }
+
     if ((str[i] == '/' || str[i] == '*' || str[i] == '^' || str[i] == 'm' ||
          str[i] == '%') &&
         (i == 0 || str[i - 1] == '(')) {
@@ -44,6 +53,7 @@ bool validate_string(const char* str) {
     }
 
     if (str[i] == '.') {
+      dot_count++;
       if (i == 0 || !isdigit(str[i - 1])) {
         int j = i + 1;
         if (!isdigit(str[j])) {

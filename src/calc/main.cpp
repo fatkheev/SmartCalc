@@ -2,6 +2,52 @@
 #include "creditcalculatorwindow.h"
 #include "mainwindow.h"
 
+QString mainWidgetStyle = "QWidget {"
+                          "background-color: #3d3d3d;" // серый цвет фона
+                          "}";
+
+QString buttonStyle = "QPushButton {"
+                      "background-color: #4CAF50;"
+                      "border: none;"
+                      "color: white;"
+                      "padding: 15px 32px;"
+                      "border-radius: 12px;"
+                      "}"
+                      "QPushButton:pressed {"
+                      "background-color: #45a049;"
+                      "}";
+
+QString otherButtonStyle = "QPushButton {"
+                           "background-color: lightgray;" // светло-серый цвет
+                           "border: none;"
+                           "color: black;" // цвет текста
+                           "padding: 15px 32px;"
+                           "border-radius: 12px;"
+                           "}"
+                           "QPushButton:pressed {"
+                           "background-color: darkgray;" // темно-серый цвет при нажатии
+                           "}";
+
+QString smallerButtonStyle = "QPushButton {"
+                              "background-color: lightgray;"
+                              "border: none;"
+                              "color: black;"
+                              "padding: 8px 16px;" // Уменьшенная высота и ширина
+                              "border-radius: 12px;"
+                              "}"
+                              "QPushButton:pressed {"
+                              "background-color: darkgray;" // темно-серый цвет при нажатии
+                              "}";
+
+QString lineEditStyle = "QLineEdit {"
+                        "color: black;"
+                        "border: 2px solid gray;"
+                        "border-radius: 10px;"
+                        "padding: 0 8px;"
+                        "background: white;"
+                        "selection-background-color: darkgray;"
+                        "}";
+
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
@@ -10,6 +56,7 @@ int main(int argc, char *argv[]) {
     mainWindow.resize(1200, 600);
 
     QWidget *mainWidget = new QWidget(&mainWindow);
+    mainWidget->setStyleSheet(mainWidgetStyle);  // Задаем стиль
     QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
 
     QSplitter *splitter = new QSplitter(Qt::Horizontal, mainWidget);
@@ -18,8 +65,10 @@ int main(int argc, char *argv[]) {
     QVBoxLayout *calculatorLayout = new QVBoxLayout(calculatorWidget);
 
     QLineEdit *lineEdit = new QLineEdit(calculatorWidget);
+    lineEdit->setStyleSheet(lineEditStyle);
     lineEdit->setPlaceholderText("Введите выражение");
     QLineEdit *xValueLineEdit = new QLineEdit(calculatorWidget);
+    xValueLineEdit->setStyleSheet(lineEditStyle);
     xValueLineEdit->setPlaceholderText("x =");
 
     calculatorLayout->addWidget(lineEdit);
@@ -46,10 +95,17 @@ int main(int argc, char *argv[]) {
                                 "4", "5", "6", "-",
                                 "1", "2", "3", "*",
                                 "0", "C", "/", "=",
-                                "x", "^"};
+                                ".", "x", "^"};
 
     for (int i = 0; i < basicButtons.size(); ++i) {
         QPushButton *btn = new QPushButton(basicButtons[i], calculatorWidget);
+
+            // Условие для изменения стиля кнопки "равно"
+            if (basicButtons[i] == "=") {
+                btn->setStyleSheet(buttonStyle);
+            } else {
+                btn->setStyleSheet(otherButtonStyle);
+            }
         basicLayout->addWidget(btn, i / 4, i % 4);
         QObject::connect(btn, &QPushButton::clicked, [lineEdit, xValueLineEdit, btn, &closeParenthesisIfNeeded]() {
             if (btn->text() == "C") {
@@ -91,6 +147,7 @@ int main(int argc, char *argv[]) {
 
     for (int i = 0; i < trigButtons.size(); ++i) {
         QPushButton *btn = new QPushButton(trigButtons[i], calculatorWidget);
+        btn->setStyleSheet(smallerButtonStyle);
         trigLayout->addWidget(btn, i / 3, i % 3);
         QObject::connect(btn, &QPushButton::clicked, [lineEdit, btn]() {
             lineEdit->insert(btn->text() + "(");
@@ -104,6 +161,7 @@ int main(int argc, char *argv[]) {
 
     for (const QString &btnText : extraButtons) {
         QPushButton *btn = new QPushButton(btnText, calculatorWidget);
+        btn->setStyleSheet(smallerButtonStyle);
         extraLayout->addWidget(btn);
         QObject::connect(btn, &QPushButton::clicked, [lineEdit, btn]() {
             if(btn->text() == "mod") {
@@ -129,9 +187,13 @@ QHBoxLayout *xRangeLayout = new QHBoxLayout;
 QHBoxLayout *yRangeLayout = new QHBoxLayout;
 
 QLineEdit *xMinLineEdit = new QLineEdit(graphWidget);
+xMinLineEdit->setStyleSheet(lineEditStyle);
 QLineEdit *xMaxLineEdit = new QLineEdit(graphWidget);
+xMaxLineEdit->setStyleSheet(lineEditStyle);
 QLineEdit *yMinLineEdit = new QLineEdit(graphWidget);
+yMinLineEdit->setStyleSheet(lineEditStyle);
 QLineEdit *yMaxLineEdit = new QLineEdit(graphWidget);
+yMaxLineEdit->setStyleSheet(lineEditStyle);
 
 QLabel *xMinLabel = new QLabel("x Min:", graphWidget);
 QLabel *xMaxLabel = new QLabel("x Max:", graphWidget);
@@ -155,7 +217,7 @@ graphLayout->addLayout(yRangeLayout);
     QCustomPlot *plot = new QCustomPlot(graphWidget);
     graphLayout->addWidget(plot);
     QPushButton *plotButton = new QPushButton("График", graphWidget);
-
+    plotButton->setStyleSheet(smallerButtonStyle);
     QObject::connect(plotButton, &QPushButton::clicked, [&]() {
 
         // Чтение и установка диапазонов осей x и y
@@ -242,6 +304,7 @@ graphLayout->addLayout(yRangeLayout);
     mainLayout->addWidget(splitter);
 
     QPushButton *toggleCreditCalculatorButton = new QPushButton("Кредитный калькулятор", mainWidget);
+    toggleCreditCalculatorButton->setStyleSheet(smallerButtonStyle);
     mainLayout->addWidget(toggleCreditCalculatorButton);
 
     mainWidget->setLayout(mainLayout);
