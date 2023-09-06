@@ -182,24 +182,38 @@ graphLayout->addLayout(yRangeLayout);
             }
 
             QString currentExpr = baseExpr;
-            currentExpr.replace("x", "%1");
-            currentExpr = currentExpr.arg(x[i]);
+            QString formattedX;
+
+            // Проверяем, является ли x[i] отрицательным числом
+            if (x[i] < 0) {
+                // Если да, оборачиваем его в скобки
+                formattedX = QString("(%1)").arg(x[i]);
+            } else {
+                // Иначе, оставляем как есть
+                formattedX = QString("%1").arg(x[i]);
+            }
+
+            currentExpr.replace("x", formattedX);
+
             y[i] = calculate(currentExpr.toStdString().c_str());
 
-            // Здесь добавляем проверку на "разрыв"
-            if (std::abs(y[i]) > tanLimit) {
-                if (!currentXs.isEmpty()) {
-                    allXs.append(currentXs);
-                    allYs.append(currentYs);
+            // Добавляем проверку на "разрыв" только для tan
+            if (baseExpr.contains("tan")) {
+                if (std::abs(y[i]) > tanLimit) {
+                    if (!currentXs.isEmpty()) {
+                        allXs.append(currentXs);
+                        allYs.append(currentYs);
+                    }
+                    currentXs.clear();
+                    currentYs.clear();
+                    continue;
                 }
-                currentXs.clear();
-                currentYs.clear();
-                continue;
             }
 
             currentXs.append(x[i]);
             currentYs.append(y[i]);
         }
+
 
         if (!currentXs.isEmpty()) {
             allXs.append(currentXs);
