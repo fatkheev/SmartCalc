@@ -14,12 +14,14 @@ SOURCES += \
     creditcalculatorwindow.cpp \
     main.cpp \
     mainwindow.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    style.cpp
 
 HEADERS += \
     creditcalculatorwindow.h \
     mainwindow.h \
-    qcustomplot.h
+    qcustomplot.h \
+    style.h
 
 FORMS += \
     mainwindow.ui
@@ -31,4 +33,8 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES +=
+DISTFILES += \
+    strelka.png
+
+RESOURCES += \
+    res.qrc

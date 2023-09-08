@@ -1,55 +1,12 @@
 #include "qcustomplot.h"
 #include "creditcalculatorwindow.h"
 #include "mainwindow.h"
-
-QString mainWidgetStyle = "QWidget {"
-                          "background-color: #3d3d3d;" // серый цвет фона
-                          "}";
-
-QString buttonStyle = "QPushButton {"
-                      "background-color: #4CAF50;"
-                      "border: none;"
-                      "color: white;"
-                      "padding: 15px 32px;"
-                      "border-radius: 12px;"
-                      "}"
-                      "QPushButton:pressed {"
-                      "background-color: #45a049;"
-                      "}";
-
-QString otherButtonStyle = "QPushButton {"
-                           "background-color: lightgray;" // светло-серый цвет
-                           "border: none;"
-                           "color: black;" // цвет текста
-                           "padding: 15px 32px;"
-                           "border-radius: 12px;"
-                           "}"
-                           "QPushButton:pressed {"
-                           "background-color: darkgray;" // темно-серый цвет при нажатии
-                           "}";
-
-QString smallerButtonStyle = "QPushButton {"
-                              "background-color: lightgray;"
-                              "border: none;"
-                              "color: black;"
-                              "padding: 8px 16px;" // Уменьшенная высота и ширина
-                              "border-radius: 12px;"
-                              "}"
-                              "QPushButton:pressed {"
-                              "background-color: darkgray;" // темно-серый цвет при нажатии
-                              "}";
-
-QString lineEditStyle = "QLineEdit {"
-                        "color: black;"
-                        "border: 2px solid gray;"
-                        "border-radius: 10px;"
-                        "padding: 0 8px;"
-                        "background: white;"
-                        "selection-background-color: darkgray;"
-                        "}";
+#include "style.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
+//    QGroupBox *basicBox = new QGroupBox("Основная панель");
+//    QGridLayout *basicLayout = new QGridLayout;
 
     QMainWindow mainWindow;
     mainWindow.setWindowTitle("Qt Калькулятор");
@@ -89,25 +46,7 @@ int main(int argc, char *argv[]) {
         return expression;
     };
 
-    QGroupBox *basicBox = new QGroupBox("Основные операции");
-    QGridLayout *basicLayout = new QGridLayout;
-    QStringList basicButtons = {"7", "8", "9", "+",
-                                "4", "5", "6", "-",
-                                "1", "2", "3", "*",
-                                "0", "C", "/", "=",
-                                ".", "x", "^"};
-
-    for (int i = 0; i < basicButtons.size(); ++i) {
-        QPushButton *btn = new QPushButton(basicButtons[i], calculatorWidget);
-
-            // Условие для изменения стиля кнопки "равно"
-            if (basicButtons[i] == "=") {
-                btn->setStyleSheet(buttonStyle);
-            } else {
-                btn->setStyleSheet(otherButtonStyle);
-            }
-        basicLayout->addWidget(btn, i / 4, i % 4);
-        QObject::connect(btn, &QPushButton::clicked, [lineEdit, xValueLineEdit, btn, &closeParenthesisIfNeeded]() {
+    auto calculatorButtonClicked = [lineEdit, xValueLineEdit, &closeParenthesisIfNeeded](QPushButton *btn) {
             if (btn->text() == "C") {
                 lineEdit->clear();
             } else if (btn->text() == "=") {
@@ -132,16 +71,65 @@ int main(int argc, char *argv[]) {
                 } catch (...) {
                     lineEdit->setText("Ошибка");
                 }
+            } else if (btn->text() == "<") {
+                QString currentText = lineEdit->text();
+                currentText.chop(1);  // Удаление последнего символа
+                lineEdit->setText(currentText);
             } else {
                 lineEdit->insert(btn->text());
             }
-        });
+
+    };
+
+    QGroupBox *upperBox = new QGroupBox("Верхняя панель");
+    QGroupBox *lowerBox = new QGroupBox("Нижняя панель");
+    upperBox->setStyleSheet("QGroupBox { border: 2px solid gray; border-radius: 9px; }");
+    lowerBox->setStyleSheet("QGroupBox { border: 2px solid gray; border-radius: 9px; }");
+
+    QGridLayout *upperLayout = new QGridLayout;
+    QGridLayout *lowerLayout = new QGridLayout;
+    upperLayout->setContentsMargins(10, 30, 10, 10);  // left, top, right, bottom
+    lowerLayout->setContentsMargins(10, 30, 10, 10);  // left, top, right, bottom
+
+
+    QStringList upperButtons = {"C", "x", "^", "<", "(", ")"};
+    QStringList lowerButtons = {"7", "8", "9", "+", "4", "5", "6", "-", "1", "2", "3", "*", "=", "0", "."};
+
+    for (int i = 0; i < upperButtons.size(); ++i) {
+        QPushButton *btn = new QPushButton(upperButtons[i], calculatorWidget);
+        btn->setStyleSheet(smallerButtonStyle);
+        if (upperButtons[i] == "C") {
+            btn->setStyleSheet(smallerButtonYellow);
+        } else {
+            btn->setStyleSheet(smallerButtonStyle);
+        }
+        upperLayout->addWidget(btn, i / 4, i % 4);
+        QObject::connect(btn, &QPushButton::clicked, [btn, &calculatorButtonClicked](){ calculatorButtonClicked(btn); });
     }
 
-    basicBox->setLayout(basicLayout);
+    for (int i = 0; i < lowerButtons.size(); ++i) {
+        QPushButton *btn = new QPushButton(lowerButtons[i], calculatorWidget);
+        if (lowerButtons[i] == "=") {
+            btn->setStyleSheet(buttonStyleGreen);
+        } else {
+            btn->setStyleSheet(otherButtonStyle);
+        }
+        lowerLayout->addWidget(btn, i / 4, i % 4);
+        QObject::connect(btn, &QPushButton::clicked, [btn, &calculatorButtonClicked](){ calculatorButtonClicked(btn); });
+    }
+
+    upperBox->setLayout(upperLayout);
+    lowerBox->setLayout(lowerLayout);
+
+    calculatorLayout->addWidget(upperBox);
+    calculatorLayout->addWidget(lowerBox);
+
+//    basicBox->setLayout(basicLayout);
 
     QGroupBox *trigBox = new QGroupBox("Тригонометрия");
     QGridLayout *trigLayout = new QGridLayout;
+    trigBox->setStyleSheet("QGroupBox { border: 2px solid gray; border-radius: 9px; }");
+    trigLayout->setContentsMargins(10, 30, 10, 10);
     QStringList trigButtons = {"sin", "cos", "tan",
                                "asin", "acos", "atan"};
 
@@ -157,6 +145,8 @@ int main(int argc, char *argv[]) {
 
     QGroupBox *extraBox = new QGroupBox("Дополнительные функции");
     QVBoxLayout *extraLayout = new QVBoxLayout;
+    extraBox->setStyleSheet("QGroupBox { border: 2px solid gray; border-radius: 9px; }");
+    extraLayout->setContentsMargins(10, 30, 10, 10);
     QStringList extraButtons = {"sqrt", "ln", "log", "mod"};
 
     for (const QString &btnText : extraButtons) {
@@ -173,7 +163,7 @@ int main(int argc, char *argv[]) {
     }
     extraBox->setLayout(extraLayout);
 
-    calculatorLayout->addWidget(basicBox);
+//    calculatorLayout->addWidget(basicBox);
     calculatorLayout->addWidget(trigBox);
     calculatorLayout->addWidget(extraBox);
 

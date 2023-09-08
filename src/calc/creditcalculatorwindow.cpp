@@ -1,4 +1,5 @@
 #include "creditcalculatorwindow.h"
+#include "style.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
@@ -13,23 +14,30 @@ CreditCalculatorWindow::CreditCalculatorWindow(QWidget *parent) : QMainWindow(pa
     this->resize(1400, 600);
 
     QWidget *centralWidget = new QWidget(this);
+    centralWidget->setStyleSheet(mainWidgetStyle);
     QHBoxLayout *mainLayout = new QHBoxLayout(centralWidget);
 
     QVBoxLayout *leftLayout = new QVBoxLayout();
 
     QLabel *loanLabel = new QLabel("Сумма кредита:");
     loanInput = new QLineEdit();
+    loanInput->setStyleSheet(lineEditStyle);
     QLabel *monthsLabel = new QLabel("Количество месяцев:");
     monthsInput = new QLineEdit();
+    monthsInput->setStyleSheet(lineEditStyle);
     QLabel *rateLabel = new QLabel("Процентная ставка:");
     rateInput = new QLineEdit();
+    rateInput->setStyleSheet(lineEditStyle);
     QLabel *typeLabel = new QLabel("Тип платежа:");
     typeCombo = new QComboBox();
+    typeCombo->setStyleSheet(comboBoxStyle);
     typeCombo->addItem("Аннуитетный");
     typeCombo->addItem("Дифференцированный");
 
     QPushButton *calculateButton = new QPushButton("Рассчитать");
+    calculateButton->setStyleSheet(buttonStyleGreen);
     QPushButton *backButton = new QPushButton("Вернуться в калькулятор");
+    backButton->setStyleSheet(otherButtonStyle);
 
     connect(calculateButton, &QPushButton::clicked, this, &CreditCalculatorWindow::calculate);
     connect(backButton, &QPushButton::clicked, this, &CreditCalculatorWindow::handleBackButton);
