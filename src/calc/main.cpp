@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
 
     QMainWindow mainWindow;
     mainWindow.setWindowTitle("Mathosha Калькулятор v1.0");
-    mainWindow.resize(1200, 950);
+    mainWindow.resize(1300, 1000);
 
     QWidget *mainWidget = new QWidget(&mainWindow);
     mainWidget->setStyleSheet(mainWidgetStyle);  // Задаем стиль
@@ -22,13 +22,13 @@ int main(int argc, char *argv[]) {
     QLineEdit *lineEdit = new QLineEdit(calculatorWidget);
     lineEdit->setStyleSheet(lineEditStyle);  // Установка стиля
     lineEdit->setPlaceholderText("Введите выражение");  // Установка подсказки
-    lineEdit->setFixedHeight(50);
+    lineEdit->setFixedHeight(55);
     QLineEdit *xValueLineEdit = new QLineEdit(calculatorWidget);
     xValueLineEdit->setStyleSheet(lineEditStyle);
     xValueLineEdit->setPlaceholderText("x =");
 
     QFont font = lineEdit->font();
-        font.setPointSize(18);  // Увеличение размера шрифта до 18
+        font.setPointSize(24);  // Увеличение размера шрифта
         lineEdit->setFont(font);
 
         calculatorLayout->addWidget(lineEdit);
@@ -134,7 +134,7 @@ int main(int argc, char *argv[]) {
         QObject::connect(btn, &QPushButton::clicked, [btn, &calculatorButtonClicked](){ calculatorButtonClicked(btn); });
     }
 
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 4; ++i) { // Для растяжения столбцов явно
         upperLayout->setColumnStretch(i, 1);
         lowerLayout->setColumnStretch(i, 1);
     }
