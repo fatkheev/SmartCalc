@@ -1,17 +1,21 @@
 #include "../stack.h"
 
+// Проверяем, является ли символ оператором.
 int isOperator(char c) {
   return (c == '+' || c == '-' || c == '*' || c == '/' || c == '^' ||
           c == '%' || c == 'm' || c == 'U');
 }
 
+// Проверяем, является ли символ математической функцией.
 int isFunction(char c) {
   return (c == 'C' || c == 'S' || c == 'T' || c == 'A' || c == 'B' ||
           c == 'N' || c == 'R' || c == 'L' || c == 'G');
 }
 
+// Проверяем, является ли символ унарным оператором.
 int isUnaryOperator(char c) { return (c == 'U'); }
 
+// Возвращает приоритет оператора.
 int priority(char c) {
   int prio = -1;
 
@@ -31,6 +35,7 @@ int priority(char c) {
   return prio;
 }
 
+// Возвращает символьное представление математической функции.
 char getFunctionChar(const char* str) {
   char functionChar = '\0';
 
@@ -57,6 +62,7 @@ char getFunctionChar(const char* str) {
   return functionChar;
 }
 
+// Конвертирует инфиксное выражение в постфиксное.
 void converter(const char* expression, char* output) {
   if (!validate_string(expression)) {
     printf("Error\n");
@@ -67,19 +73,23 @@ void converter(const char* expression, char* output) {
   int top = -1;
   int k = 0;
 
+  // Обходим каждый символ в выражении.
   for (size_t i = 0; i < strlen(expression); i++) {
     char ch = expression[i];
 
+    // Обработка унарного минуса.
     if (ch == '-' &&
         (i == 0 || expression[i - 1] == '(' || isOperator(expression[i - 1]))) {
       ch = 'U';
     }
 
+    // Пропускаем унарный плюс.
     if (ch == '+' &&
         (i == 0 || expression[i - 1] == '(' || isOperator(expression[i - 1]))) {
       continue;
     }
 
+    // Обработка математических функций.
     if (isFunction(getFunctionChar(expression + i))) {
       ch = getFunctionChar(expression + i);
       operators[++top] = ch;
@@ -88,15 +98,19 @@ void converter(const char* expression, char* output) {
         i++;
       }
       i--;
-    } else if (ch == 'm' && i + 2 < strlen(expression) &&
-               strncmp(expression + i, "mod", 3) == 0) {
+    }
+    // Обработка оператора mod.
+    else if (ch == 'm' && i + 2 < strlen(expression) &&
+             strncmp(expression + i, "mod", 3) == 0) {
       while (top != -1 && priority(operators[top]) >= priority('m')) {
         output[k++] = operators[top--];
         output[k++] = ' ';
       }
       operators[++top] = 'm';
       i += 2;
-    } else if (ch == '.') {
+    }
+    // Обработка десятичных чисел.
+    else if (ch == '.') {
       if (i == 0 || !isdigit(expression[i - 1])) {
         output[k++] = '0';
       }
@@ -115,27 +129,37 @@ void converter(const char* expression, char* output) {
       }
       i--;
       output[k++] = ' ';
-    } else if (isdigit(ch)) {
+    }
+    // Обработка целых чисел.
+    else if (isdigit(ch)) {
       while (i < strlen(expression) &&
              (isdigit(expression[i]) || expression[i] == '.')) {
         output[k++] = expression[i++];
       }
       i--;
       output[k++] = ' ';
-    } else if (ch == '(') {
+    }
+    // Обработка открывающей скобки.
+    else if (ch == '(') {
       operators[++top] = ch;
-    } else if (ch == ')') {
+    }
+    // Обработка закрывающей скобки.
+    else if (ch == ')') {
       while (top != -1 && operators[top] != '(') {
         output[k++] = operators[top--];
         output[k++] = ' ';
       }
+      // Если функция находится перед открывающей скобкой, добавляем ее в
+      // выходную строку.
       if (top > 0 && isFunction(operators[top - 1])) {
         k--;
         output[k++] = operators[--top];
         output[k++] = ' ';
       }
       top--;
-    } else if (isOperator(ch)) {
+    }
+    // Обработка операторов.
+    else if (isOperator(ch)) {
       while (top != -1 && priority(operators[top]) >= priority(ch)) {
         output[k++] = operators[top--];
         output[k++] = ' ';
@@ -144,6 +168,7 @@ void converter(const char* expression, char* output) {
     }
   }
 
+  // Добавляем оставшиеся операторы в выходную строку.
   while (top != -1) {
     output[k++] = operators[top--];
     output[k++] = ' ';
@@ -152,6 +177,7 @@ void converter(const char* expression, char* output) {
   output[k] = '\0';
 }
 
+// Вычисляет результат постфиксного выражения.
 double calculate(const char* infixExpression) {
   if (!validate_string(infixExpression)) {
     printf("Error\n");
@@ -194,6 +220,7 @@ double calculate(const char* infixExpression) {
     } else if (isOperator(ch)) {
       double value2 = values[top--];
       double value1 = values[top--];
+      // Обработка различных операторов.
       if (ch == '+') {
         values[++top] = value1 + value2;
       } else if (ch == '-') {
@@ -210,6 +237,7 @@ double calculate(const char* infixExpression) {
 
     } else if (isFunction(ch)) {
       double value = values[top--];
+      // Обработка различных функций.
       if (ch == 'C') {
         values[++top] = cos(value);
       } else if (ch == 'S') {

@@ -29,19 +29,19 @@ END_TEST
 
 // Тесты для вадидации
 START_TEST(test_validate_string) {
-    ck_assert_double_eq(validate_string("1 2"), false);
-    ck_assert_double_eq(validate_string("123 456"), false);
-    ck_assert_double_eq(validate_string("1.2 3.4"), false);
-    ck_assert_double_eq(validate_string("10 20 + 30 40"), false);
-    ck_assert_double_eq(validate_string("10 + 20 30"), false);
-    ck_assert_double_eq(validate_string("8   mod"), false);
-    ck_assert_double_eq(validate_string("mod 8"), false);
-    ck_assert_double_eq(validate_string("/8"), false);
-    ck_assert_double_eq(validate_string("- - - - 8"), false);
-    ck_assert_double_eq(validate_string("- + - 8 -"), false);
-    ck_assert_double_eq(validate_string("- * 8"), false);
-    ck_assert_double_eq(validate_string("-*8"), false);
-    ck_assert_double_eq(validate_string("* * * *"), false);
+  ck_assert_double_eq(validate_string("1 2"), false);
+  ck_assert_double_eq(validate_string("123 456"), false);
+  ck_assert_double_eq(validate_string("1.2 3.4"), false);
+  ck_assert_double_eq(validate_string("10 20 + 30 40"), false);
+  ck_assert_double_eq(validate_string("10 + 20 30"), false);
+  ck_assert_double_eq(validate_string("8   mod"), false);
+  ck_assert_double_eq(validate_string("mod 8"), false);
+  ck_assert_double_eq(validate_string("/8"), false);
+  ck_assert_double_eq(validate_string("- - - - 8"), false);
+  ck_assert_double_eq(validate_string("- + - 8 -"), false);
+  ck_assert_double_eq(validate_string("- * 8"), false);
+  ck_assert_double_eq(validate_string("-*8"), false);
+  ck_assert_double_eq(validate_string("* * * *"), false);
 }
 END_TEST
 

@@ -12,4 +12,4 @@ extern QString smallerButtonYellow;
 extern QString lineEditStyle;
 extern QString comboBoxStyle;
 
-#endif // STYLE_H
+#endif  // STYLE_H

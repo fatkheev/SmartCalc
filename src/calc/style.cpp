@@ -1,73 +1,81 @@
-#include <QString>
 #include "style.h"
 
-QString mainWidgetStyle = "QWidget {"
-                          "background-color: #3d3d3d;" // серый цвет фона
-                          "}";
+#include <QString>
 
-QString buttonStyleGreen = "QPushButton {"
-                      "background-color: #4CAF50;"
-                      "border: none;"
-                      "color: white;"
-                      "padding: 15px 32px;"
-                      "border-radius: 12px;"
-                      "}"
-                      "QPushButton:pressed {"
-                      "background-color: #45a049;"
-                      "}";
+QString mainWidgetStyle =
+    "QWidget {"
+    "background-color: #3d3d3d;"  // серый цвет фона
+    "}";
 
-QString buttonStyleYellow = "QPushButton {"
-                           "background-color: yellow;"
-                           "border: none;"
-                           "color: black;"
-                           "padding: 15px 32px;"
-                           "border-radius: 12px;"
-                           "}"
-                           "QPushButton:pressed {"
-                           "background-color: #45a049;"
-                           "}";
+QString buttonStyleGreen =
+    "QPushButton {"
+    "background-color: #4CAF50;"
+    "border: none;"
+    "color: white;"
+    "padding: 15px 32px;"
+    "border-radius: 12px;"
+    "}"
+    "QPushButton:pressed {"
+    "background-color: #45a049;"
+    "}";
 
-QString otherButtonStyle = "QPushButton {"
-                           "background-color: lightgray;" // светло-серый цвет
-                           "border: none;"
-                           "color: black;" // цвет текста
-                           "padding: 15px 32px;"
-                           "border-radius: 12px;"
-                           "}"
-                           "QPushButton:pressed {"
-                           "background-color: darkgray;" // темно-серый цвет при нажатии
-                           "}";
+QString buttonStyleYellow =
+    "QPushButton {"
+    "background-color: yellow;"
+    "border: none;"
+    "color: black;"
+    "padding: 15px 32px;"
+    "border-radius: 12px;"
+    "}"
+    "QPushButton:pressed {"
+    "background-color: #45a049;"
+    "}";
 
-QString smallerButtonStyle = "QPushButton {"
-                             "background-color: lightgray;"
-                             "border: none;"
-                             "color: black;"
-                             "padding: 8px 16px;" // Уменьшенная высота и ширина
-                             "border-radius: 12px;"
-                             "}"
-                             "QPushButton:pressed {"
-                             "background-color: darkgray;" // темно-серый цвет при нажатии
-                             "}";
+QString otherButtonStyle =
+    "QPushButton {"
+    "background-color: lightgray;"  // светло-серый цвет
+    "border: none;"
+    "color: black;"  // цвет текста
+    "padding: 15px 32px;"
+    "border-radius: 12px;"
+    "}"
+    "QPushButton:pressed {"
+    "background-color: darkgray;"  // темно-серый цвет при нажатии
+    "}";
 
-QString smallerButtonYellow = "QPushButton {"
-                             "background-color: yellow;"
-                             "border: none;"
-                             "color: black;"
-                             "padding: 8px 16px;" // Уменьшенная высота и ширина
-                             "border-radius: 12px;"
-                             "}"
-                             "QPushButton:pressed {"
-                             "background-color: #f2e600;" // цвет при нажатии
-                             "}";
+QString smallerButtonStyle =
+    "QPushButton {"
+    "background-color: lightgray;"
+    "border: none;"
+    "color: black;"
+    "padding: 8px 16px;"  // Уменьшенная высота и ширина
+    "border-radius: 12px;"
+    "}"
+    "QPushButton:pressed {"
+    "background-color: darkgray;"  // темно-серый цвет при нажатии
+    "}";
 
-QString lineEditStyle = "QLineEdit {"
-                        "color: black;"
-                        "border: 2px solid gray;"
-                        "border-radius: 10px;"
-                        "padding: 0 8px;"
-                        "background: white;"
-                        "selection-background-color: darkgray;"
-                        "}";
+QString smallerButtonYellow =
+    "QPushButton {"
+    "background-color: yellow;"
+    "border: none;"
+    "color: black;"
+    "padding: 8px 16px;"  // Уменьшенная высота и ширина
+    "border-radius: 12px;"
+    "}"
+    "QPushButton:pressed {"
+    "background-color: #f2e600;"  // цвет при нажатии
+    "}";
+
+QString lineEditStyle =
+    "QLineEdit {"
+    "color: black;"
+    "border: 2px solid gray;"
+    "border-radius: 10px;"
+    "padding: 0 8px;"
+    "background: white;"
+    "selection-background-color: darkgray;"
+    "}";
 
 QString comboBoxStyle = R"(
 QComboBox {
