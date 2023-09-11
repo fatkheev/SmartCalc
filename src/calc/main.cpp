@@ -6,12 +6,9 @@
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
-//    QGroupBox *basicBox = new QGroupBox("Основная панель");
-//    QGridLayout *basicLayout = new QGridLayout;
-
     QMainWindow mainWindow;
-    mainWindow.setWindowTitle("Qt Калькулятор");
-    mainWindow.resize(1200, 600);
+    mainWindow.setWindowTitle("Mathosha Калькулятор v1.0");
+    mainWindow.resize(1200, 950);
 
     QWidget *mainWidget = new QWidget(&mainWindow);
     mainWidget->setStyleSheet(mainWidgetStyle);  // Задаем стиль
@@ -23,13 +20,18 @@ int main(int argc, char *argv[]) {
     QVBoxLayout *calculatorLayout = new QVBoxLayout(calculatorWidget);
 
     QLineEdit *lineEdit = new QLineEdit(calculatorWidget);
-    lineEdit->setStyleSheet(lineEditStyle);
-    lineEdit->setPlaceholderText("Введите выражение");
+    lineEdit->setStyleSheet(lineEditStyle);  // Установка стиля
+    lineEdit->setPlaceholderText("Введите выражение");  // Установка подсказки
+    lineEdit->setFixedHeight(50);
     QLineEdit *xValueLineEdit = new QLineEdit(calculatorWidget);
     xValueLineEdit->setStyleSheet(lineEditStyle);
     xValueLineEdit->setPlaceholderText("x =");
 
-    calculatorLayout->addWidget(lineEdit);
+    QFont font = lineEdit->font();
+        font.setPointSize(18);  // Увеличение размера шрифта до 18
+        lineEdit->setFont(font);
+
+        calculatorLayout->addWidget(lineEdit);
     calculatorLayout->addWidget(xValueLineEdit);
 
     QObject::connect(lineEdit, &QLineEdit::textChanged, [lineEdit]() {
@@ -72,7 +74,7 @@ int main(int argc, char *argv[]) {
                 } catch (...) {
                     lineEdit->setText("Ошибка");
                 }
-            } else if (btn->text() == "<") {
+            } else if (btn->text() == "Del") {
                 QString currentText = lineEdit->text();
                 currentText.chop(1);  // Удаление последнего символа
                 lineEdit->setText(currentText);
@@ -82,50 +84,67 @@ int main(int argc, char *argv[]) {
 
     };
 
-    QGroupBox *upperBox = new QGroupBox("Верхняя панель");
-    QGroupBox *lowerBox = new QGroupBox("Нижняя панель");
+    QGroupBox *upperBox = new QGroupBox("Действия");
+    QGroupBox *lowerBox = new QGroupBox("Ввод выражения");
     upperBox->setStyleSheet("QGroupBox { border: 2px solid gray; border-radius: 9px; }");
     lowerBox->setStyleSheet("QGroupBox { border: 2px solid gray; border-radius: 9px; }");
 
     QGridLayout *upperLayout = new QGridLayout;
     QGridLayout *lowerLayout = new QGridLayout;
-    upperLayout->setContentsMargins(10, 30, 10, 10);  // left, top, right, bottom
-    lowerLayout->setContentsMargins(10, 30, 10, 10);  // left, top, right, bottom
+    upperLayout->setContentsMargins(10, 30, 10, 10);
+    lowerLayout->setContentsMargins(10, 30, 10, 10);
 
-
-    QStringList upperButtons = {"C", "x", "^", "<", "(", ")"};
-    QStringList lowerButtons = {"7", "8", "9", "+", "4", "5", "6", "-", "1", "2", "3", "*", "=", "0", "."};
+    QStringList upperButtons = {"C", "(", ")", "x", "Del"};
+    QStringList lowerButtons = {"7", "8", "9", "+", "4", "5", "6", "-", "1", "2", "3", "*", "0", ".","^", "/","="};
 
     for (int i = 0; i < upperButtons.size(); ++i) {
-        QPushButton *btn = new QPushButton(upperButtons[i], calculatorWidget);
-        btn->setStyleSheet(smallerButtonStyle);
-        if (upperButtons[i] == "C") {
-            btn->setStyleSheet(smallerButtonYellow);
-        } else {
+        QPushButton *btnC = new QPushButton("C", calculatorWidget);
+        btnC->setStyleSheet(smallerButtonYellow);  // Стиль для кнопки "C"
+        upperLayout->addWidget(btnC, 0, 0, 1, 4); // Занимает первую строку и все 4 столбца
+        QObject::connect(btnC, &QPushButton::clicked, [btnC, &calculatorButtonClicked](){ calculatorButtonClicked(btnC); });
+
+        for (int i = 1; i < upperButtons.size(); ++i) {  // Стартуем с 1, так как "C" уже добавлена
+            QPushButton *btn = new QPushButton(upperButtons[i], calculatorWidget);
             btn->setStyleSheet(smallerButtonStyle);
+            upperLayout->addWidget(btn, 1, i - 1);  // Изменим индексы для отступа под кнопкой "C"
+            QObject::connect(btn, &QPushButton::clicked, [btn, &calculatorButtonClicked](){ calculatorButtonClicked(btn); });
         }
-        upperLayout->addWidget(btn, i / 4, i % 4);
-        QObject::connect(btn, &QPushButton::clicked, [btn, &calculatorButtonClicked](){ calculatorButtonClicked(btn); });
     }
 
+
+    int row = 0;
+    int col = 0;
     for (int i = 0; i < lowerButtons.size(); ++i) {
         QPushButton *btn = new QPushButton(lowerButtons[i], calculatorWidget);
         if (lowerButtons[i] == "=") {
             btn->setStyleSheet(buttonStyleGreen);
+            lowerLayout->addWidget(btn, row, col, 1, 4);  // Занимает 1 строку и 4 столбца
+            lowerLayout->setColumnStretch(col, 4);  // Настраиваем растяжимость
         } else {
             btn->setStyleSheet(otherButtonStyle);
+            lowerLayout->addWidget(btn, row, col);
         }
-        lowerLayout->addWidget(btn, i / 4, i % 4);
+
+        col++;
+        if (col >= 4) {
+            col = 0;
+            row++;
+        }
+
         QObject::connect(btn, &QPushButton::clicked, [btn, &calculatorButtonClicked](){ calculatorButtonClicked(btn); });
     }
+
+    for (int i = 0; i < 4; ++i) {
+        upperLayout->setColumnStretch(i, 1);
+        lowerLayout->setColumnStretch(i, 1);
+    }
+
 
     upperBox->setLayout(upperLayout);
     lowerBox->setLayout(lowerLayout);
 
     calculatorLayout->addWidget(upperBox);
     calculatorLayout->addWidget(lowerBox);
-
-//    basicBox->setLayout(basicLayout);
 
     QGroupBox *trigBox = new QGroupBox("Тригонометрия");
     QGridLayout *trigLayout = new QGridLayout;
