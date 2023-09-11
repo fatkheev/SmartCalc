@@ -11,7 +11,19 @@
 #include <QSplitter>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QString>
 #include <cmath>
+#include <QComboBox>
+#include <QList>
+#include <QMainWindow>
+#include <QPushButton>
+#include <QTableWidget>
+#include <QGuiApplication>
+#include <QScreen>
+#include <QLabel>
+
+
+#include <QFormLayout>
 
 extern "C" {
 bool validate_string(const char* str);

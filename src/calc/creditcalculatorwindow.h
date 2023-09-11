@@ -1,12 +1,7 @@
 #ifndef CREDITCALCULATORWINDOW_H
 #define CREDITCALCULATORWINDOW_H
 
-#include <QComboBox>
-#include <QLineEdit>
-#include <QList>
-#include <QMainWindow>
-#include <QPushButton>
-#include <QTableWidget>
+#include "mainwindow.h"
 
 class CreditCalculatorWindow : public QMainWindow {
   Q_OBJECT
@@ -33,6 +28,9 @@ class CreditCalculatorWindow : public QMainWindow {
   QPushButton *showAllButton;
   QList<int> hiddenRows;
   int showAllButtonRow;
+  QLabel *resultMonthlyPayment;
+  QLabel *resultAccruedInterest;
+  QLabel *resultTotalPayment;
 };
 
 #endif  // CREDITCALCULATORWINDOW_H

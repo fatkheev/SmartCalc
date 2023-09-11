@@ -4,11 +4,16 @@
 #include "style.h"
 
 int main(int argc, char *argv[]) {
+  qputenv("QT_SCALE_FACTOR", "0.85");
   QApplication app(argc, argv);
 
   QMainWindow mainWindow;
   mainWindow.setWindowTitle("Mathosha Калькулятор v1.0");
-  mainWindow.resize(1300, 1000);
+  QScreen *screen = QGuiApplication::primaryScreen();
+  QRect screenGeometry = screen->geometry();
+  int height = (screenGeometry.height()*80)/100;
+  int width = (screenGeometry.width()*80)/100;
+  mainWindow.resize(width, height);
 
   QWidget *mainWidget = new QWidget(&mainWindow);
   mainWidget->setStyleSheet(mainWidgetStyle);  // Задаем стиль

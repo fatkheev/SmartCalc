@@ -1,3 +1,5 @@
+#include "mainwindow.h"
+
 #ifndef STYLE_H
 #define STYLE_H
 
