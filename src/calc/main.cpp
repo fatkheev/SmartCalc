@@ -5,6 +5,7 @@
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
+
 //    QGroupBox *basicBox = new QGroupBox("Основная панель");
 //    QGridLayout *basicLayout = new QGridLayout;
 

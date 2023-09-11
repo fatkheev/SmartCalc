@@ -12,6 +12,7 @@
 #include <QWidget>
 #include <QSplitter>
 #include <cmath>
+#include <QFocusEvent>
 
 extern "C" {
 bool validate_string(const char* str);
