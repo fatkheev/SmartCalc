@@ -49,7 +49,7 @@ CreditCalculatorWindow::CreditCalculatorWindow(QWidget *parent)
     QLabel *typeLabel = new QLabel("Тип платежа:");
     typeLabel->setStyleSheet(biggerFont);
     typeCombo = new QComboBox();
-    typeCombo->setStyleSheet(comboBoxStyle + biggerFont);
+    typeCombo->setStyleSheet(comboBoxStyle);
     typeCombo->addItem("Аннуитетный");
     typeCombo->addItem("Дифференцированный");
 

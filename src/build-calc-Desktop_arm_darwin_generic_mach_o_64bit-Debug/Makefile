@@ -14,10 +14,10 @@ EQ            = =
 
 CC            = /Library/Developer/CommandLineTools/usr/bin/clang
 CXX           = /Library/Developer/CommandLineTools/usr/bin/clang++
-DEFINES       = -DQT_QML_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_QML_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_OPENGLWIDGETS_LIB -DQT_WIDGETS_LIB -DQT_OPENGL_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g $(EXPORT_ARCH_ARGS) -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -mmacosx-version-min=13.0 -Wall -Wextra $(DEFINES)
 CXXFLAGS      = -pipe -stdlib=libc++ -g -std=gnu++1z $(EXPORT_ARCH_ARGS) -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -mmacosx-version-min=13.0 -Wall -Wextra $(DEFINES)
-INCPATH       = -I../calc -I. -I/opt/homebrew/lib/QtPrintSupport.framework/Headers -I/opt/homebrew/lib/QtWidgets.framework/Headers -I/opt/homebrew/lib/QtGui.framework/Headers -I/opt/homebrew/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/AGL.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/AGL.framework/Headers -I/opt/homebrew/share/qt/mkspecs/macx-clang -F/opt/homebrew/lib
+INCPATH       = -I../calc -I. -I/opt/homebrew/lib/QtPrintSupport.framework/Headers -I/opt/homebrew/lib/QtOpenGLWidgets.framework/Headers -I/opt/homebrew/lib/QtWidgets.framework/Headers -I/opt/homebrew/lib/QtOpenGL.framework/Headers -I/opt/homebrew/lib/QtGui.framework/Headers -I/opt/homebrew/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/AGL.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/AGL.framework/Headers -I/opt/homebrew/share/qt/mkspecs/macx-clang -F/opt/homebrew/lib
 QMAKE         = /opt/homebrew/Cellar/qt/6.5.1_3/bin/qmake6
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -40,7 +40,7 @@ DISTNAME      = calc1.0.0
 DISTDIR = /Users/fatkheev/Yandex.Disk.localized/GITHUB/SmartCalc/src/build-calc-Desktop_arm_darwin_generic_mach_o_64bit-Debug/.tmp/calc1.0.0
 LINK          = /Library/Developer/CommandLineTools/usr/bin/clang++
 LFLAGS        = -stdlib=libc++ -headerpad_max_install_names $(EXPORT_ARCH_ARGS) -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -mmacosx-version-min=13.0 -Wl,-rpath,@executable_path/../Frameworks -Wl,-rpath,/opt/homebrew/lib
-LIBS          = $(SUBLIBS) -F/opt/homebrew/lib -framework QtPrintSupport -framework ApplicationServices -framework QtWidgets -framework QtGui -framework AppKit -framework ImageIO -framework Metal -framework QtCore -framework IOKit -framework DiskArbitration -lcups -framework AGL -framework OpenGL   
+LIBS          = $(SUBLIBS) -F/opt/homebrew/lib -framework QtPrintSupport -framework ApplicationServices -framework QtOpenGLWidgets -framework QtWidgets -framework QtOpenGL -framework QtGui -framework AppKit -framework ImageIO -framework Metal -framework QtCore -framework IOKit -framework DiskArbitration -lcups -framework AGL -framework OpenGL   
 AR            = /Library/Developer/CommandLineTools/usr/bin/ar cq
 RANLIB        = /Library/Developer/CommandLineTools/usr/bin/ranlib -s
 SED           = sed
@@ -73,7 +73,8 @@ OBJECTS       = stack.o \
 		moc_creditcalculatorwindow.o \
 		moc_mainwindow.o \
 		moc_qcustomplot.o
-DIST          = ../calc/strelka.png \
+DIST          = ../calc/cat.gif \
+		../calc/strelka.png \
 		/opt/homebrew/share/qt/mkspecs/features/spec_pre.prf \
 		/opt/homebrew/share/qt/mkspecs/features/device_config.prf \
 		/opt/homebrew/Cellar/qt/6.5.1_3/share/qt/mkspecs/common/unix.conf \
@@ -345,6 +346,7 @@ DIST          = ../calc/strelka.png \
 		/opt/homebrew/share/qt/mkspecs/features/qt_config.prf \
 		/opt/homebrew/share/qt/mkspecs/macx-clang/qmake.conf \
 		/opt/homebrew/share/qt/mkspecs/features/spec_post.prf \
+		../calc/.qmake.stash \
 		/opt/homebrew/share/qt/mkspecs/features/exclusive_builds.prf \
 		/opt/homebrew/share/qt/mkspecs/features/mac/sdk.prf \
 		/opt/homebrew/share/qt/mkspecs/features/toolchain.prf \
@@ -392,7 +394,7 @@ TARGET        = calc.app/Contents/MacOS/calc
 EXPORT_QMAKE_MAC_SDK = macosx
 EXPORT_QMAKE_MAC_SDK_VERSION = 13.3
 EXPORT_QMAKE_XCODE_DEVELOPER_PATH = /Library/Developer/CommandLineTools
-EXPORT__QMAKE_STASH_ = 
+EXPORT__QMAKE_STASH_ = /Users/fatkheev/Yandex.Disk.localized/GITHUB/SmartCalc/src/build-calc-Desktop_arm_darwin_generic_mach_o_64bit-Debug/.qmake.stash
 EXPORT_VALID_ARCHS = arm64
 EXPORT_DEFAULT_ARCHS = arm64
 EXPORT_ARCHS = $(filter $(EXPORT_VALID_ARCHS), $(if $(ARCHS), $(ARCHS), $(if $(EXPORT_DEFAULT_ARCHS), $(EXPORT_DEFAULT_ARCHS), $(EXPORT_VALID_ARCHS))))
@@ -679,6 +681,7 @@ Makefile: ../calc/calc.pro /opt/homebrew/share/qt/mkspecs/macx-clang/qmake.conf 
 		/opt/homebrew/share/qt/mkspecs/features/qt_config.prf \
 		/opt/homebrew/share/qt/mkspecs/macx-clang/qmake.conf \
 		/opt/homebrew/share/qt/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/opt/homebrew/share/qt/mkspecs/features/exclusive_builds.prf \
 		/opt/homebrew/share/qt/mkspecs/features/mac/sdk.prf \
 		/opt/homebrew/share/qt/mkspecs/features/toolchain.prf \
@@ -711,7 +714,9 @@ Makefile: ../calc/calc.pro /opt/homebrew/share/qt/mkspecs/macx-clang/qmake.conf 
 		../calc/calc.pro \
 		../calc/res.qrc \
 		/opt/homebrew/lib/QtPrintSupport.framework/Resources/QtPrintSupport.prl \
+		/opt/homebrew/lib/QtOpenGLWidgets.framework/Resources/QtOpenGLWidgets.prl \
 		/opt/homebrew/lib/QtWidgets.framework/Resources/QtWidgets.prl \
+		/opt/homebrew/lib/QtOpenGL.framework/Resources/QtOpenGL.prl \
 		/opt/homebrew/lib/QtGui.framework/Resources/QtGui.prl \
 		/opt/homebrew/lib/QtCore.framework/Resources/QtCore.prl
 	$(QMAKE) -o Makefile ../calc/calc.pro -spec macx-clang CONFIG+=debug CONFIG+=qml_debug
@@ -986,6 +991,7 @@ Makefile: ../calc/calc.pro /opt/homebrew/share/qt/mkspecs/macx-clang/qmake.conf 
 /opt/homebrew/share/qt/mkspecs/features/qt_config.prf:
 /opt/homebrew/share/qt/mkspecs/macx-clang/qmake.conf:
 /opt/homebrew/share/qt/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /opt/homebrew/share/qt/mkspecs/features/exclusive_builds.prf:
 /opt/homebrew/share/qt/mkspecs/features/mac/sdk.prf:
 /opt/homebrew/share/qt/mkspecs/features/toolchain.prf:
@@ -1018,7 +1024,9 @@ Makefile: ../calc/calc.pro /opt/homebrew/share/qt/mkspecs/macx-clang/qmake.conf 
 ../calc/calc.pro:
 ../calc/res.qrc:
 /opt/homebrew/lib/QtPrintSupport.framework/Resources/QtPrintSupport.prl:
+/opt/homebrew/lib/QtOpenGLWidgets.framework/Resources/QtOpenGLWidgets.prl:
 /opt/homebrew/lib/QtWidgets.framework/Resources/QtWidgets.prl:
+/opt/homebrew/lib/QtOpenGL.framework/Resources/QtOpenGL.prl:
 /opt/homebrew/lib/QtGui.framework/Resources/QtGui.prl:
 /opt/homebrew/lib/QtCore.framework/Resources/QtCore.prl:
 qmake: FORCE
@@ -1059,6 +1067,7 @@ clean: compiler_clean
 
 distclean: clean 
 	-$(DEL_FILE) -r calc.app
+	-$(DEL_FILE) .qmake.stash
 	-$(DEL_FILE) Makefile
 
 
@@ -1080,7 +1089,8 @@ compiler_rcc_clean:
 	-$(DEL_FILE) qrc_res.cpp
 qrc_res.cpp: ../calc/res.qrc \
 		/opt/homebrew/share/qt/libexec/rcc \
-		../calc/strelka.png
+		../calc/strelka.png \
+		../calc/cat.gif
 	/opt/homebrew/share/qt/libexec/rcc -name res ../calc/res.qrc -o qrc_res.cpp
 
 compiler_moc_predefs_make_all: moc_predefs.h
@@ -1093,21 +1103,46 @@ compiler_moc_header_make_all: moc_creditcalculatorwindow.cpp moc_mainwindow.cpp 
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_creditcalculatorwindow.cpp moc_mainwindow.cpp moc_qcustomplot.cpp
 moc_creditcalculatorwindow.cpp: ../calc/creditcalculatorwindow.h \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/QComboBox \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/qcombobox.h \
+		../calc/mainwindow.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QApplication \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qapplication.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QFocusEvent \
+		/opt/homebrew/lib/QtGui.framework/Headers/qevent.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QGridLayout \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qgridlayout.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QGroupBox \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qgroupbox.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/QLineEdit \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qlineedit.h \
-		/opt/homebrew/lib/QtCore.framework/Headers/QList \
-		/opt/homebrew/lib/QtCore.framework/Headers/qlist.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/QMainWindow \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qmainwindow.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/QPushButton \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QSplitter \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qsplitter.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QWidget \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qwidget.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QString \
+		/opt/homebrew/lib/QtCore.framework/Headers/qstring.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QComboBox \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qcombobox.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QList \
+		/opt/homebrew/lib/QtCore.framework/Headers/qlist.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/QTableWidget \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qtablewidget.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QGuiApplication \
+		/opt/homebrew/lib/QtGui.framework/Headers/qguiapplication.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QScreen \
+		/opt/homebrew/lib/QtGui.framework/Headers/qscreen.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QLabel \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qlabel.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QFormLayout \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qformlayout.h \
 		moc_predefs.h \
 		/opt/homebrew/share/qt/libexec/moc
-	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/fatkheev/Yandex.Disk.localized/GITHUB/SmartCalc/src/build-calc-Desktop_arm_darwin_generic_mach_o_64bit-Debug/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/fatkheev/Yandex.Disk.localized/GITHUB/SmartCalc/src/calc -I/opt/homebrew/lib/QtPrintSupport.framework/Headers -I/opt/homebrew/lib/QtWidgets.framework/Headers -I/opt/homebrew/lib/QtGui.framework/Headers -I/opt/homebrew/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/14.0.3/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/opt/homebrew/lib ../calc/creditcalculatorwindow.h -o moc_creditcalculatorwindow.cpp
+	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/fatkheev/Yandex.Disk.localized/GITHUB/SmartCalc/src/build-calc-Desktop_arm_darwin_generic_mach_o_64bit-Debug/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/fatkheev/Yandex.Disk.localized/GITHUB/SmartCalc/src/calc -I/opt/homebrew/lib/QtPrintSupport.framework/Headers -I/opt/homebrew/lib/QtOpenGLWidgets.framework/Headers -I/opt/homebrew/lib/QtWidgets.framework/Headers -I/opt/homebrew/lib/QtOpenGL.framework/Headers -I/opt/homebrew/lib/QtGui.framework/Headers -I/opt/homebrew/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/14.0.3/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/opt/homebrew/lib ../calc/creditcalculatorwindow.h -o moc_creditcalculatorwindow.cpp
 
 moc_mainwindow.cpp: ../calc/mainwindow.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/QApplication \
@@ -1130,17 +1165,37 @@ moc_mainwindow.cpp: ../calc/mainwindow.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qboxlayout.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/QWidget \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qwidget.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QString \
+		/opt/homebrew/lib/QtCore.framework/Headers/qstring.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QComboBox \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qcombobox.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QList \
+		/opt/homebrew/lib/QtCore.framework/Headers/qlist.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QTableWidget \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qtablewidget.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QGuiApplication \
+		/opt/homebrew/lib/QtGui.framework/Headers/qguiapplication.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QScreen \
+		/opt/homebrew/lib/QtGui.framework/Headers/qscreen.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QLabel \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qlabel.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QFormLayout \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qformlayout.h \
 		moc_predefs.h \
 		/opt/homebrew/share/qt/libexec/moc
-	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/fatkheev/Yandex.Disk.localized/GITHUB/SmartCalc/src/build-calc-Desktop_arm_darwin_generic_mach_o_64bit-Debug/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/fatkheev/Yandex.Disk.localized/GITHUB/SmartCalc/src/calc -I/opt/homebrew/lib/QtPrintSupport.framework/Headers -I/opt/homebrew/lib/QtWidgets.framework/Headers -I/opt/homebrew/lib/QtGui.framework/Headers -I/opt/homebrew/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/14.0.3/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/opt/homebrew/lib ../calc/mainwindow.h -o moc_mainwindow.cpp
+	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/fatkheev/Yandex.Disk.localized/GITHUB/SmartCalc/src/build-calc-Desktop_arm_darwin_generic_mach_o_64bit-Debug/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/fatkheev/Yandex.Disk.localized/GITHUB/SmartCalc/src/calc -I/opt/homebrew/lib/QtPrintSupport.framework/Headers -I/opt/homebrew/lib/QtOpenGLWidgets.framework/Headers -I/opt/homebrew/lib/QtWidgets.framework/Headers -I/opt/homebrew/lib/QtOpenGL.framework/Headers -I/opt/homebrew/lib/QtGui.framework/Headers -I/opt/homebrew/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/14.0.3/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/opt/homebrew/lib ../calc/mainwindow.h -o moc_mainwindow.cpp
 
 moc_qcustomplot.cpp: ../calc/qcustomplot.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/qmath.h \
+		/opt/homebrew/lib/QtOpenGL.framework/Headers/QOpenGLFramebufferObject \
+		/opt/homebrew/lib/QtOpenGL.framework/Headers/qopenglframebufferobject.h \
+		/opt/homebrew/lib/QtOpenGL.framework/Headers/QOpenGLPaintDevice \
+		/opt/homebrew/lib/QtOpenGL.framework/Headers/qopenglpaintdevice.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/qnumeric.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/QtNumeric \
 		moc_predefs.h \
 		/opt/homebrew/share/qt/libexec/moc
-	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/fatkheev/Yandex.Disk.localized/GITHUB/SmartCalc/src/build-calc-Desktop_arm_darwin_generic_mach_o_64bit-Debug/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/fatkheev/Yandex.Disk.localized/GITHUB/SmartCalc/src/calc -I/opt/homebrew/lib/QtPrintSupport.framework/Headers -I/opt/homebrew/lib/QtWidgets.framework/Headers -I/opt/homebrew/lib/QtGui.framework/Headers -I/opt/homebrew/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/14.0.3/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/opt/homebrew/lib ../calc/qcustomplot.h -o moc_qcustomplot.cpp
+	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/fatkheev/Yandex.Disk.localized/GITHUB/SmartCalc/src/build-calc-Desktop_arm_darwin_generic_mach_o_64bit-Debug/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/fatkheev/Yandex.Disk.localized/GITHUB/SmartCalc/src/calc -I/opt/homebrew/lib/QtPrintSupport.framework/Headers -I/opt/homebrew/lib/QtOpenGLWidgets.framework/Headers -I/opt/homebrew/lib/QtWidgets.framework/Headers -I/opt/homebrew/lib/QtOpenGL.framework/Headers -I/opt/homebrew/lib/QtGui.framework/Headers -I/opt/homebrew/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/14.0.3/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/opt/homebrew/lib ../calc/qcustomplot.h -o moc_qcustomplot.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -1172,39 +1227,6 @@ validator.o: ../func/validator.c ../stack.h
 	$(CC) -c $(CFLAGS) $(INCPATH) -o validator.o ../func/validator.c
 
 creditcalculatorwindow.o: ../calc/creditcalculatorwindow.cpp ../calc/creditcalculatorwindow.h \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/QComboBox \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/qcombobox.h \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/QLineEdit \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/qlineedit.h \
-		/opt/homebrew/lib/QtCore.framework/Headers/QList \
-		/opt/homebrew/lib/QtCore.framework/Headers/qlist.h \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/QMainWindow \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/QPushButton \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/qpushbutton.h \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/QTableWidget \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/qtablewidget.h \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/QHBoxLayout \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/qboxlayout.h \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/QLabel \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/qlabel.h \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/QVBoxLayout \
-		../calc/style.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o creditcalculatorwindow.o ../calc/creditcalculatorwindow.cpp
-
-main.o: ../calc/main.cpp ../calc/creditcalculatorwindow.h \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/QComboBox \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/qcombobox.h \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/QLineEdit \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/qlineedit.h \
-		/opt/homebrew/lib/QtCore.framework/Headers/QList \
-		/opt/homebrew/lib/QtCore.framework/Headers/qlist.h \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/QMainWindow \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/QPushButton \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/qpushbutton.h \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/QTableWidget \
-		/opt/homebrew/lib/QtWidgets.framework/Headers/qtablewidget.h \
 		../calc/mainwindow.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/QApplication \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qapplication.h \
@@ -1214,17 +1236,101 @@ main.o: ../calc/main.cpp ../calc/creditcalculatorwindow.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qgridlayout.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/QGroupBox \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qgroupbox.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QLineEdit \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qlineedit.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QMainWindow \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QPushButton \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qpushbutton.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/QSplitter \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qsplitter.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/QVBoxLayout \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qboxlayout.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/QWidget \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qwidget.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QString \
+		/opt/homebrew/lib/QtCore.framework/Headers/qstring.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QComboBox \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qcombobox.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QList \
+		/opt/homebrew/lib/QtCore.framework/Headers/qlist.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QTableWidget \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qtablewidget.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QGuiApplication \
+		/opt/homebrew/lib/QtGui.framework/Headers/qguiapplication.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QScreen \
+		/opt/homebrew/lib/QtGui.framework/Headers/qscreen.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QLabel \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qlabel.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QFormLayout \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qformlayout.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QHBoxLayout \
+		../calc/style.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o creditcalculatorwindow.o ../calc/creditcalculatorwindow.cpp
+
+main.o: ../calc/main.cpp ../calc/creditcalculatorwindow.h \
+		../calc/mainwindow.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QApplication \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qapplication.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QFocusEvent \
+		/opt/homebrew/lib/QtGui.framework/Headers/qevent.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QGridLayout \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qgridlayout.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QGroupBox \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qgroupbox.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QLineEdit \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qlineedit.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QMainWindow \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QPushButton \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QSplitter \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qsplitter.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QWidget \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qwidget.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QString \
+		/opt/homebrew/lib/QtCore.framework/Headers/qstring.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QComboBox \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qcombobox.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QList \
+		/opt/homebrew/lib/QtCore.framework/Headers/qlist.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QTableWidget \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qtablewidget.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QGuiApplication \
+		/opt/homebrew/lib/QtGui.framework/Headers/qguiapplication.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QScreen \
+		/opt/homebrew/lib/QtGui.framework/Headers/qscreen.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QLabel \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qlabel.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QFormLayout \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qformlayout.h \
 		../calc/qcustomplot.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/qmath.h \
+		/opt/homebrew/lib/QtOpenGL.framework/Headers/QOpenGLFramebufferObject \
+		/opt/homebrew/lib/QtOpenGL.framework/Headers/qopenglframebufferobject.h \
+		/opt/homebrew/lib/QtOpenGL.framework/Headers/QOpenGLPaintDevice \
+		/opt/homebrew/lib/QtOpenGL.framework/Headers/qopenglpaintdevice.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/qnumeric.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/QtNumeric \
-		../calc/style.h
+		../calc/style.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QMovie \
+		/opt/homebrew/lib/QtGui.framework/Headers/qmovie.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QTimer \
+		/opt/homebrew/lib/QtCore.framework/Headers/qtimer.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QCursor \
+		/opt/homebrew/lib/QtGui.framework/Headers/qcursor.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QGraphicsView \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qgraphicsview.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QGraphicsScene \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qgraphicsscene.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QGraphicsPixmapItem \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qgraphicsitem.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QStackedWidget \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qstackedwidget.h \
+		/opt/homebrew/lib/QtOpenGLWidgets.framework/Headers/QOpenGLWidget \
+		/opt/homebrew/lib/QtOpenGLWidgets.framework/Headers/qopenglwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../calc/main.cpp
 
 mainwindow.o: ../calc/mainwindow.cpp ../calc/mainwindow.h \
@@ -1248,18 +1354,73 @@ mainwindow.o: ../calc/mainwindow.cpp ../calc/mainwindow.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qboxlayout.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/QWidget \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qwidget.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QString \
+		/opt/homebrew/lib/QtCore.framework/Headers/qstring.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QComboBox \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qcombobox.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QList \
+		/opt/homebrew/lib/QtCore.framework/Headers/qlist.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QTableWidget \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qtablewidget.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QGuiApplication \
+		/opt/homebrew/lib/QtGui.framework/Headers/qguiapplication.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QScreen \
+		/opt/homebrew/lib/QtGui.framework/Headers/qscreen.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QLabel \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qlabel.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QFormLayout \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qformlayout.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../calc/mainwindow.cpp
 
 qcustomplot.o: ../calc/qcustomplot.cpp ../calc/qcustomplot.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/qmath.h \
+		/opt/homebrew/lib/QtOpenGL.framework/Headers/QOpenGLFramebufferObject \
+		/opt/homebrew/lib/QtOpenGL.framework/Headers/qopenglframebufferobject.h \
+		/opt/homebrew/lib/QtOpenGL.framework/Headers/QOpenGLPaintDevice \
+		/opt/homebrew/lib/QtOpenGL.framework/Headers/qopenglpaintdevice.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/qnumeric.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/QtNumeric
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qcustomplot.o ../calc/qcustomplot.cpp
 
 style.o: ../calc/style.cpp ../calc/style.h \
+		../calc/mainwindow.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QApplication \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qapplication.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QFocusEvent \
+		/opt/homebrew/lib/QtGui.framework/Headers/qevent.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QGridLayout \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qgridlayout.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QGroupBox \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qgroupbox.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QLineEdit \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qlineedit.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QMainWindow \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QPushButton \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QSplitter \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qsplitter.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QWidget \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qwidget.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/QString \
-		/opt/homebrew/lib/QtCore.framework/Headers/qstring.h
+		/opt/homebrew/lib/QtCore.framework/Headers/qstring.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QComboBox \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qcombobox.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QList \
+		/opt/homebrew/lib/QtCore.framework/Headers/qlist.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QTableWidget \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qtablewidget.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QGuiApplication \
+		/opt/homebrew/lib/QtGui.framework/Headers/qguiapplication.h \
+		/opt/homebrew/lib/QtGui.framework/Headers/QScreen \
+		/opt/homebrew/lib/QtGui.framework/Headers/qscreen.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QLabel \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qlabel.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QFormLayout \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qformlayout.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o style.o ../calc/style.cpp
 
 qrc_res.o: qrc_res.cpp 

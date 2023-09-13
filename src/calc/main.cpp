@@ -3,6 +3,18 @@
 #include "qcustomplot.h"
 #include "style.h"
 
+#include <QMovie>
+#include <QLabel>
+#include <QTimer>
+#include <QCursor>
+
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QGraphicsPixmapItem>
+#include <QStackedWidget>
+
+#include <QOpenGLWidget>
+
 int main(int argc, char *argv[]) {
   qputenv("QT_SCALE_FACTOR", "0.85");
   QApplication app(argc, argv);
@@ -352,6 +364,48 @@ int main(int argc, char *argv[]) {
     mainWindow.hide();
     creditCalculator.show();
   });
+
+  // Создание QWidget для анимации котенка
+  QWidget *widget = new QWidget(&mainWindow);
+
+  QLabel *label = new QLabel(widget);
+  label->setStyleSheet("background: transparent; border: none;");
+
+  QMovie *catMovie = new QMovie(":/cat.gif");
+
+  // Reintroduced the scaling
+  const int newWidth = 300;  // ширина
+  const int newHeight = 300; // высота
+  QObject::connect(catMovie, &QMovie::frameChanged, [&]() {
+      QPixmap scaledPixmap = catMovie->currentPixmap().scaled(newWidth, newHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+      label->setPixmap(scaledPixmap);
+      widget->setFixedSize(scaledPixmap.size());
+  });
+
+  label->setMovie(catMovie);
+  catMovie->start();
+
+  // Следуем за курсором с задержкой
+  QTimer *timer = new QTimer();
+  QObject::connect(timer, &QTimer::timeout, [&]() {
+      QPoint globalMousePos = QCursor::pos();
+      // Вычисляем координаты для widget так, чтобы он был рядом с курсором
+      QPoint targetPos = globalMousePos - QPoint(newWidth - 200, newHeight - 200);
+      QPoint currentPos = widget->pos();
+      QPoint newPos = currentPos + 0.05 * (targetPos - currentPos); // "скользящее" следование
+      widget->move(newPos);
+  });
+  timer->start(16);  // Обновляем положение каждые 16 мс
+
+  // Обновление экрана
+  QTimer *updateTimer = new QTimer();
+  QObject::connect(updateTimer, &QTimer::timeout, [&]() {
+      mainWindow.update();
+  });
+  updateTimer->start(8);  // Обновляем экран каждые 8 мс (в два раза выстрее самой анимации, это убирает рамку)
+
+  widget->show();
+
 
   mainWindow.show();
 
