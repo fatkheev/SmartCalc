@@ -3,18 +3,6 @@
 #include "qcustomplot.h"
 #include "style.h"
 
-#include <QMovie>
-#include <QLabel>
-#include <QTimer>
-#include <QCursor>
-
-#include <QGraphicsView>
-#include <QGraphicsScene>
-#include <QGraphicsPixmapItem>
-#include <QStackedWidget>
-
-#include <QOpenGLWidget>
-
 int main(int argc, char *argv[]) {
   qputenv("QT_SCALE_FACTOR", "0.85");
   QApplication app(argc, argv);
