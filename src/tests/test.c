@@ -42,6 +42,7 @@ START_TEST(test_validate_string) {
   ck_assert_double_eq(validate_string("- * 8"), false);
   ck_assert_double_eq(validate_string("-*8"), false);
   ck_assert_double_eq(validate_string("* * * *"), false);
+  ck_assert_double_eq(validate_string("(5 + )"), false);
 }
 END_TEST
 

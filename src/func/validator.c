@@ -20,16 +20,16 @@ bool validate_string(const char* str) {
     }
 
     int j = i + 1;
-    while (is_valid && str[j] && str[j] != ')') {  // что это
+    while (is_valid && str[j] != ')') {  // ищет скобку
       j++;
     }
 
     int k = j - 1;
-    while (str[k] == ' ' && k > i) {
+    while (str[k] == ' ' && k > i) { // потом двигается назад, схлопывая пробелы
       k--;
     }
 
-    if (isOperator(str[k])) {
+    if (isOperator(str[k])) { // потом проверяет, есть ли перед скобкой оператор
       is_valid = false;
     }
   }
