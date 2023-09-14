@@ -40,3 +40,5 @@ void MathFunctions(char ch, double* values, int* top);
 
 // Проверка ввода функций
 bool validate_functions_in_string(const char* str);
+// Часть функции validate_string для рефакторинга
+bool isInvalidChar(const char* str, int i, int dot_count);

@@ -15,62 +15,20 @@ bool validate_string(const char* str) {
       dot_count = 0;
     }
 
-    if (dot_count > 1 ||
-        ((str[i] == '/' || str[i] == '*' || str[i] == '^' || str[i] == 'm' ||
-          str[i] == '%') &&
-         (i == 0 || str[i - 1] == '(')) ||
-        (!isdigit(str[i]) && !isOperator(str[i]) && !isalpha(str[i]) &&
-         str[i] != '.' && str[i] != ' ' && str[i] != '(' && str[i] != ')')) {
+    if (isInvalidChar(str, i, dot_count)) {
       is_valid = false;
-    } else if (isdigit(str[i]) && i > 0 && str[i - 1] == ' ') {
-      int j = i - 2;
-      while (j >= 0 && str[j] == ' ') j--;
-      if (j >= 0 && isdigit(str[j])) {
-        is_valid = false;
-      }
-    } else if (isOperator(str[i])) {
-      int j = i - 1;
-      while (j >= 0 && str[j] == ' ') j--;
-      if (j >= 0 && isOperator(str[j]) &&
-          !((str[j] == '/' && str[i] == '-') ||
-            (str[j] == '*' && str[i] == '-') ||
-            (str[j] == '*' && str[i] == '+'))) {
-        is_valid = false;
-      }
-    } else if (str[i] == '.') {
-      dot_count++;
-      if (i == 0 || !isdigit(str[i - 1])) {
-        int j = i + 1;
-        if (!isdigit(str[j])) {
-          is_valid = false;
-        }
-      } else if (str[i] == '(') {
-        if (str[i + 1] == ')' || (i > 0 && isdigit(str[i - 1]))) {
-          is_valid = false;
-        }
-        open_parentheses++;
-      } else if (str[i] == ')') {
-        if (isdigit(str[i + 1])) {
-          is_valid = false;
-        }
-        close_parentheses++;
-      } else {
-        int j = i + 1;
-        if (str[j] && !isdigit(str[j]) && str[j] != ' ' &&
-            !isOperator(str[j])) {
-          is_valid = false;
-        }
-      }
     }
 
     int j = i + 1;
-    while (is_valid && str[j] && str[j] != ')') { // что это
+    while (is_valid && str[j] && str[j] != ')') {  // что это
       j++;
     }
+
     int k = j - 1;
     while (str[k] == ' ' && k > i) {
       k--;
     }
+
     if (isOperator(str[k])) {
       is_valid = false;
     }
@@ -86,6 +44,44 @@ bool validate_string(const char* str) {
 
 bool has_function(const char* str, const char* func) {
   return strstr(str, func) != NULL;
+}
+
+// Часть функции validate_string для рефакторинга
+bool isInvalidChar(const char* str, int i, int dot_count) {
+  bool result = false;
+
+  if (dot_count > 1 ||
+      ((str[i] == '/' || str[i] == '*' || str[i] == '^' || str[i] == 'm' ||
+        str[i] == '%') &&
+       (i == 0 || str[i - 1] == '(')) ||
+      (!isdigit(str[i]) && !isOperator(str[i]) && !isalpha(str[i]) &&
+       str[i] != '.' && str[i] != ' ' && str[i] != '(' && str[i] != ')')) {
+    result = true;
+  } else if (isdigit(str[i]) && i > 0 && str[i - 1] == ' ') {
+    int j = i - 2;
+    while (j >= 0 && str[j] == ' ') j--;
+    if (j >= 0 && isdigit(str[j])) {
+      result = true;
+    }
+  } else if (isOperator(str[i])) {
+    int j = i - 1;
+    while (j >= 0 && str[j] == ' ') j--;
+    if (j >= 0 && isOperator(str[j]) &&
+        !((str[j] == '/' && str[i] == '-') ||
+          (str[j] == '*' && str[i] == '-') ||
+          (str[j] == '*' && str[i] == '+'))) {
+      result = true;
+    }
+  } else if (str[i] == '.') {
+    if (i == 0 || !isdigit(str[i - 1])) {
+      int j = i + 1;
+      if (!isdigit(str[j])) {
+        result = true;
+      }
+    }
+  }
+
+  return result;
 }
 
 // Проверка ввода функций
