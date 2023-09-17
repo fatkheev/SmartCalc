@@ -11,23 +11,23 @@ CONFIG += c++17
 SOURCES += \
     ../func/stack.c \
     ../func/validator.c \
-    creditcalculatorwindow.cpp \
     main.cpp \
     mainwindow.cpp \
     qcustomplot.cpp \
     style.cpp
+    style.qss
+    qcustomplot.cpp
+
+QT += \
+    printsupport
 
 HEADERS += \
-    creditcalculatorwindow.h \
     mainwindow.h \
-    qcustomplot.h \
-    style.h
+    qcustomplot.h
+    qcustomplot.h
 
 FORMS += \
     mainwindow.ui
-
-QT += printsupport
-QT += openglwidgets
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -35,8 +35,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    cat.gif \
-    strelka.png
-
-RESOURCES += \
-    res.qrc
+    style/styles.qss

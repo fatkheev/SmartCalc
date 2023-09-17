@@ -18,7 +18,8 @@ char UnaryMinus(char ch, size_t i, const char* expression);
 // Обработка унарного плюса
 int UnaryPlus(char ch, size_t i, const char* expression);
 // Обработка математических функций
-void MathFunction(char* ch, char* operators, int* top, size_t* i, const char* expression);
+void MathFunction(char* ch, char* operators, int* top, size_t* i,
+                  const char* expression);
 // Обработка оператора mod
 void ModOperator(char* operators, int* top, size_t* i, char* output, int* k);
 // Обработка десятичных чисел
@@ -28,11 +29,13 @@ void CeilNumbers(const char* expression, size_t* i, char* output, int* k);
 // Обработка закрытой скобки
 void ClosingParenthesis(char* operators, int* top, char* output, int* k);
 // Обработка операторов с приоритетами
-void OperatorsPriority(char ch, char* operators, int* top, char* output, int* k);
+void OperatorsPriority(char ch, char* operators, int* top, char* output,
+                       int* k);
 // Арифметические действия
 void ArithmeticOperations(char ch, double* values, int* top);
 // Стандартная обработка цифр в постфиксном выражении
-void StandartValueOperations(const char* postfix, size_t* i, double* values, int* top);
+void StandartValueOperations(const char* postfix, size_t* i, double* values,
+                             int* top);
 // Обработка функций
 void MathFunctions(char ch, double* values, int* top);
 
