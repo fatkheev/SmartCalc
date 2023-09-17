@@ -23,5 +23,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QString replaceXWithValue(const QString &expression, const QString &xValue);
 };
 #endif // MAINWINDOW_H

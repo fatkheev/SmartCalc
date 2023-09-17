@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
@@ -17,119 +18,412 @@
     <item>
      <layout class="QVBoxLayout" name="leftLayout">
       <item>
-       <widget class="QLineEdit" name="expr_input" />
+       <widget class="QLineEdit" name="expr_input"/>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="x_value_input">
+        <property name="placeholderText">
+         <string>x=</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="UpPanel" rowstretch="0">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetDefaultConstraint</enum>
+        </property>
+        <item row="0" column="0">
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>C</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
        <layout class="QGridLayout" name="gridLayout">
-        <item row="1" column="2">
-         <widget class="QPushButton" name="button_6">
-          <property name="text">
-           <string>6</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QPushButton" name="button_7">
-          <property name="text">
-           <string>7</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QPushButton" name="button_8">
-          <property name="text">
-           <string>8</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QPushButton" name="button_4">
-          <property name="text">
-           <string>4</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QPushButton" name="button_0">
-          <property name="text">
-           <string>0</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QPushButton" name="button_9">
-          <property name="text">
-           <string>9</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QPushButton" name="button_dot">
-          <property name="text">
-           <string>.</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QPushButton" name="button_add">
-          <property name="text">
-           <string>+</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QPushButton" name="button_5">
-          <property name="text">
-           <string>5</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QPushButton" name="button_1">
-          <property name="text">
-           <string>1</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <widget class="QPushButton" name="button_multiply">
-          <property name="text">
-           <string>*</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="3">
-         <widget class="QPushButton" name="button_equals">
-          <property name="text">
-           <string>=</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QPushButton" name="button_divide">
-          <property name="text">
-           <string>/</string>
-          </property>
-         </widget>
-        </item>
         <item row="2" column="2">
          <widget class="QPushButton" name="button_3">
+          <property name="styleSheet">
+           <string notr="true">        QPushButton {
+              font-size: 18px;
+              min-width: 40px;
+              min-height: 40px;
+              border-radius: 20px;
+              background-color: #f0f0f0;
+              padding: 10px;
+              color: black;
+          }
+          QPushButton:hover {
+              background-color: #e0e0e0;
+          }
+          QPushButton:pressed {
+              background-color: #d0d0d0;
+          }</string>
+          </property>
           <property name="text">
            <string>3</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QPushButton" name="button_2">
+        <item row="0" column="1">
+         <widget class="QPushButton" name="button_8">
+          <property name="styleSheet">
+           <string notr="true">        QPushButton {
+              font-size: 18px;
+              min-width: 40px;
+              min-height: 40px;
+              border-radius: 20px;
+              background-color: #f0f0f0;
+              padding: 10px;
+              color: black;
+          }
+          QPushButton:hover {
+              background-color: #e0e0e0;
+          }
+          QPushButton:pressed {
+              background-color: #d0d0d0;
+          }</string>
+          </property>
           <property name="text">
-           <string>2</string>
+           <string>8</string>
           </property>
          </widget>
         </item>
         <item row="2" column="3">
          <widget class="QPushButton" name="button_subtract">
+          <property name="styleSheet">
+           <string notr="true">        QPushButton {
+              font-size: 18px;
+              min-width: 40px;
+              min-height: 40px;
+              border-radius: 20px;
+              background-color: #f0f0f0;
+              padding: 10px;
+              color: black;
+          }
+          QPushButton:hover {
+              background-color: #e0e0e0;
+          }
+          QPushButton:pressed {
+              background-color: #d0d0d0;
+          }</string>
+          </property>
           <property name="text">
            <string>-</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QPushButton" name="button_0">
+          <property name="styleSheet">
+           <string notr="true">        QPushButton {
+              font-size: 18px;
+              min-width: 40px;
+              min-height: 40px;
+              border-radius: 20px;
+              background-color: #f0f0f0;
+              padding: 10px;
+              color: black;
+          }
+          QPushButton:hover {
+              background-color: #e0e0e0;
+          }
+          QPushButton:pressed {
+              background-color: #d0d0d0;
+          }</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QPushButton" name="button_6">
+          <property name="styleSheet">
+           <string notr="true">        QPushButton {
+              font-size: 18px;
+              min-width: 40px;
+              min-height: 40px;
+              border-radius: 20px;
+              background-color: #f0f0f0;
+              padding: 10px;
+              color: black;
+          }
+          QPushButton:hover {
+              background-color: #e0e0e0;
+          }
+          QPushButton:pressed {
+              background-color: #d0d0d0;
+          }</string>
+          </property>
+          <property name="text">
+           <string>6</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QPushButton" name="button_1">
+          <property name="styleSheet">
+           <string notr="true">        QPushButton {
+              font-size: 18px;
+              min-width: 40px;
+              min-height: 40px;
+              border-radius: 20px;
+              background-color: #f0f0f0;
+              padding: 10px;
+              color: black;
+          }
+          QPushButton:hover {
+              background-color: #e0e0e0;
+          }
+          QPushButton:pressed {
+              background-color: #d0d0d0;
+          }</string>
+          </property>
+          <property name="text">
+           <string>1</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QPushButton" name="button_add">
+          <property name="styleSheet">
+           <string notr="true">        QPushButton {
+              font-size: 18px;
+              min-width: 40px;
+              min-height: 40px;
+              border-radius: 20px;
+              background-color: #f0f0f0;
+              padding: 10px;
+              color: black;
+          }
+          QPushButton:hover {
+              background-color: #e0e0e0;
+          }
+          QPushButton:pressed {
+              background-color: #d0d0d0;
+          }</string>
+          </property>
+          <property name="text">
+           <string>+</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QPushButton" name="button_9">
+          <property name="styleSheet">
+           <string notr="true">        QPushButton {
+              font-size: 18px;
+              min-width: 40px;
+              min-height: 40px;
+              border-radius: 20px;
+              background-color: #f0f0f0;
+              padding: 10px;
+              color: black;
+          }
+          QPushButton:hover {
+              background-color: #e0e0e0;
+          }
+          QPushButton:pressed {
+              background-color: #d0d0d0;
+          }</string>
+          </property>
+          <property name="text">
+           <string>9</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QPushButton" name="button_4">
+          <property name="styleSheet">
+           <string notr="true">        QPushButton {
+              font-size: 18px;
+              min-width: 40px;
+              min-height: 40px;
+              border-radius: 20px;
+              background-color: #f0f0f0;
+              padding: 10px;
+              color: black;
+          }
+          QPushButton:hover {
+              background-color: #e0e0e0;
+          }
+          QPushButton:pressed {
+              background-color: #d0d0d0;
+          }</string>
+          </property>
+          <property name="text">
+           <string>4</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QPushButton" name="button_multiply">
+          <property name="styleSheet">
+           <string notr="true">        QPushButton {
+              font-size: 18px;
+              min-width: 40px;
+              min-height: 40px;
+              border-radius: 20px;
+              background-color: #f0f0f0;
+              padding: 10px;
+              color: black;
+          }
+          QPushButton:hover {
+              background-color: #e0e0e0;
+          }
+          QPushButton:pressed {
+              background-color: #d0d0d0;
+          }</string>
+          </property>
+          <property name="text">
+           <string>*</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QPushButton" name="button_divide">
+          <property name="styleSheet">
+           <string notr="true">        QPushButton {
+              font-size: 18px;
+              min-width: 40px;
+              min-height: 40px;
+              border-radius: 20px;
+              background-color: #f0f0f0;
+              padding: 10px;
+              color: black;
+          }
+          QPushButton:hover {
+              background-color: #e0e0e0;
+          }
+          QPushButton:pressed {
+              background-color: #d0d0d0;
+          }</string>
+          </property>
+          <property name="text">
+           <string>/</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QPushButton" name="button_dot">
+          <property name="styleSheet">
+           <string notr="true">        QPushButton {
+              font-size: 18px;
+              min-width: 40px;
+              min-height: 40px;
+              border-radius: 20px;
+              background-color: #f0f0f0;
+              padding: 10px;
+              color: black;
+          }
+          QPushButton:hover {
+              background-color: #e0e0e0;
+          }
+          QPushButton:pressed {
+              background-color: #d0d0d0;
+          }</string>
+          </property>
+          <property name="text">
+           <string>.</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="3">
+         <widget class="QPushButton" name="button_equals">
+          <property name="styleSheet">
+           <string notr="true">        QPushButton {
+              font-size: 18px;
+              min-width: 40px;
+              min-height: 40px;
+              border-radius: 20px;
+              background-color: #f0f0f0;
+              padding: 10px;
+              color: black;
+          }
+          QPushButton:hover {
+              background-color: #e0e0e0;
+          }
+          QPushButton:pressed {
+              background-color: #d0d0d0;
+          }</string>
+          </property>
+          <property name="text">
+           <string>=</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="button_5">
+          <property name="styleSheet">
+           <string notr="true">        QPushButton {
+              font-size: 18px;
+              min-width: 40px;
+              min-height: 40px;
+              border-radius: 20px;
+              background-color: #f0f0f0;
+              padding: 10px;
+              color: black;
+          }
+          QPushButton:hover {
+              background-color: #e0e0e0;
+          }
+          QPushButton:pressed {
+              background-color: #d0d0d0;
+          }</string>
+          </property>
+          <property name="text">
+           <string>5</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QPushButton" name="button_2">
+          <property name="styleSheet">
+           <string notr="true">        QPushButton {
+              font-size: 18px;
+              min-width: 40px;
+              min-height: 40px;
+              border-radius: 20px;
+              background-color: #f0f0f0;
+              padding: 10px;
+              color: black;
+          }
+          QPushButton:hover {
+              background-color: #e0e0e0;
+          }
+          QPushButton:pressed {
+              background-color: #d0d0d0;
+          }</string>
+          </property>
+          <property name="text">
+           <string>2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QPushButton" name="button_7">
+          <property name="styleSheet">
+           <string notr="true">        QPushButton {
+              font-size: 18px;
+              min-width: 40px;
+              min-height: 40px;
+              border-radius: 20px;
+              background-color: #f0f0f0;
+              padding: 10px;
+              color: black;
+          }
+          QPushButton:hover {
+              background-color: #e0e0e0;
+          }
+          QPushButton:pressed {
+              background-color: #d0d0d0;
+          }</string>
+          </property>
+          <property name="text">
+           <string>7</string>
           </property>
          </widget>
         </item>
@@ -137,8 +431,49 @@
       </item>
      </layout>
     </item>
-
-   <item><layout class="QVBoxLayout" name="rightLayout"><item><widget class="QPushButton" name="buttonPlot"><property name="text"><string>&#1043;&#1088;&#1072;&#1092;&#1080;&#1082;</string></property></widget></item><item><widget class="QLineEdit" name="lineEdit_xMin"><property name="placeholderText"><string>xMin</string></property></widget></item><item><widget class="QLineEdit" name="lineEdit_xMax"><property name="placeholderText"><string>xMax</string></property></widget></item><item><widget class="QLineEdit" name="lineEdit_yMin"><property name="placeholderText"><string>yMin</string></property></widget></item><item><widget class="QLineEdit" name="lineEdit_yMax"><property name="placeholderText"><string>yMax</string></property></widget></item><item><widget class="QCustomPlot" name="plotWidget" /></item></layout></item></layout>
+    <item>
+     <layout class="QVBoxLayout" name="rightLayout">
+      <item>
+       <widget class="QPushButton" name="buttonPlot">
+        <property name="text">
+         <string>График</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_xMin">
+        <property name="placeholderText">
+         <string>xMin</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_xMax">
+        <property name="placeholderText">
+         <string>xMax</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_yMin">
+        <property name="placeholderText">
+         <string>yMin</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_yMax">
+        <property name="placeholderText">
+         <string>yMax</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCustomPlot" name="plotWidget" native="true"/>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -150,8 +485,15 @@
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar" />
+  <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources />
- <connections />
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
 </ui>

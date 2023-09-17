@@ -8,7 +8,7 @@ extern "C" {
 #include <QFile>
 #include <QTextStream>
 #include "mainwindow.h"
-#include "style.cpp"
+
 #include "qcustomplot.h"
 #include <cmath>
 #include "qcustomplot.h"
@@ -20,7 +20,26 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setAppStyles();
+
+    // Для кнопки C
+    connect(ui->pushButton, &QPushButton::clicked, [=](){ ui->expr_input->clear(); });
+
+//    // Для кнопки (
+//    connect(ui->button_open_bracket, &QPushButton::clicked, [=](){ append_to_input("("); });
+
+//    // Для кнопки )
+//    connect(ui->button_close_bracket, &QPushButton::clicked, [=](){ append_to_input(")"); });
+
+//    // Для кнопки x
+//    connect(ui->button_x, &QPushButton::clicked, [=](){ append_to_input("x"); });
+
+//    // Для кнопки del
+//    connect(ui->button_del, &QPushButton::clicked, [=](){
+//        QString current_text = ui->expr_input->text();
+//        current_text.chop(1);  // Удалить последний символ
+//        ui->expr_input->setText(current_text);
+//    });
+
 
     // Кнопки цифр
     connect(ui->button_0, &QPushButton::clicked, [=](){ append_to_input("0"); });
@@ -60,7 +79,8 @@ void MainWindow::append_to_input(QString text) {
 }
 
 void MainWindow::calculate_expression() {
-    QString expression = ui->expr_input->text();
+    QString xValue = ui->x_value_input->text();
+    QString expression = replaceXWithValue(ui->expr_input->text(), xValue);
     double result = calculate(expression.toStdString().c_str());
     ui->expr_input->setText(QString::number(result));
 }
@@ -74,11 +94,9 @@ void plotFunction(QCustomPlot *customPlot, const QString &function,
     for (int i = 0; i < 401; ++i) {
         x[i] = xMin + (xMax - xMin) * i / 400.0;
         // Use the calculate function for y[i]
-
-QString current_expr = function;
-current_expr.replace("x", QString::number(x[i]));
-y[i] = calculate(current_expr.toStdString().c_str());
-
+        QString current_expr = function;
+        current_expr.replace("x", QString::number(x[i]));
+        y[i] = calculate(current_expr.toStdString().c_str());
     }
 
     // create graph and assign data to it:
@@ -91,13 +109,19 @@ y[i] = calculate(current_expr.toStdString().c_str());
     customPlot->replot();
 }
 
-
 void MainWindow::plot_graph() {
     QString expression = ui->expr_input->text();
-    double xMin = ui->lineEdit_xMin->text().toDouble();
-    double xMax = ui->lineEdit_xMax->text().toDouble();
-    double yMin = ui->lineEdit_yMin->text().toDouble();
-    double yMax = ui->lineEdit_yMax->text().toDouble();
+    double xMin = (ui->lineEdit_xMin->text().isEmpty()) ? -5.0 : ui->lineEdit_xMin->text().toDouble();
+    double xMax = (ui->lineEdit_xMax->text().isEmpty()) ? 5.0 : ui->lineEdit_xMax->text().toDouble();
+    double yMin = (ui->lineEdit_yMin->text().isEmpty()) ? -5.0 : ui->lineEdit_yMin->text().toDouble();
+    double yMax = (ui->lineEdit_yMax->text().isEmpty()) ? 5.0 : ui->lineEdit_yMax->text().toDouble();
 
     plotFunction(ui->plotWidget, expression, xMin, xMax, yMin, yMax);
+}
+
+
+QString MainWindow::replaceXWithValue(const QString &expression, const QString &xValue) {
+    QString modifiedExpression = expression;
+    modifiedExpression.replace("x", xValue);
+    return modifiedExpression;
 }
