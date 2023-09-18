@@ -47,6 +47,8 @@ MainWindow::MainWindow(QWidget *parent)
         ui->expr_input->setText(current_text);
     });
 
+    // Сигнал проверки количества символов в поле ввода
+    connect(ui->expr_input, &QLineEdit::textChanged, this, &MainWindow::checkInputLength);
 
     // Кнопки цифр
     connect(ui->button_0, &QPushButton::clicked, [=](){ append_to_input("0"); });
@@ -137,6 +139,13 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+// Функция проверки количества символов в поле ввода
+void MainWindow::checkInputLength() {
+    if (ui->expr_input->text().length() > 255) {
+        ui->expr_input->setText("Ошибка: превышен лимит символов");
+    }
 }
 
 // Поле ввода

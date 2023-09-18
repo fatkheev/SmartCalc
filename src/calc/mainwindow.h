@@ -21,6 +21,7 @@ private slots:
     void calculate_expression();
     void plot_graph();
     void openCreditCalculator();
+    void checkInputLength();
 
 private:
     Ui::MainWindow *ui;
