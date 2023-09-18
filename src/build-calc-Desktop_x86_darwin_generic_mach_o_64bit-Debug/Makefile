@@ -54,15 +54,21 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../func/stack.c \
 		../func/validator.c \
+		../calc/creditcalculatorwindow.cpp \
 		../calc/main.cpp \
 		../calc/mainwindow.cpp \
-		../calc/qcustomplot.cpp moc_mainwindow.cpp \
+		../calc/qcustomplot.cpp \
+		../calc/style.cpp moc_creditcalculatorwindow.cpp \
+		moc_mainwindow.cpp \
 		moc_qcustomplot.cpp
 OBJECTS       = stack.o \
 		validator.o \
+		creditcalculatorwindow.o \
 		main.o \
 		mainwindow.o \
 		qcustomplot.o \
+		style.o \
+		moc_creditcalculatorwindow.o \
 		moc_mainwindow.o \
 		moc_qcustomplot.o
 DIST          = ../calc/style/styles.qss \
@@ -292,7 +298,6 @@ DIST          = ../calc/style/styles.qss \
 		/usr/local/share/qt/mkspecs/features/qt_config.prf \
 		/usr/local/share/qt/mkspecs/macx-clang/qmake.conf \
 		/usr/local/share/qt/mkspecs/features/spec_post.prf \
-		../calc/.qmake.stash \
 		/usr/local/share/qt/mkspecs/features/exclusive_builds.prf \
 		/usr/local/share/qt/mkspecs/features/mac/sdk.prf \
 		/usr/local/share/qt/mkspecs/features/toolchain.prf \
@@ -321,12 +326,17 @@ DIST          = ../calc/style/styles.qss \
 		/usr/local/share/qt/mkspecs/features/exceptions.prf \
 		/usr/local/share/qt/mkspecs/features/yacc.prf \
 		/usr/local/share/qt/mkspecs/features/lex.prf \
-		../calc/calc.pro ../calc/mainwindow.h \
-		../calc/qcustomplot.h ../func/stack.c \
+		../calc/calc.pro ../creditcalculatorwindow.h \
+		../calc/creditcalculatorwindow.h \
+		../calc/mainwindow.h \
+		../calc/qcustomplot.h \
+		../calc/style.h ../func/stack.c \
 		../func/validator.c \
+		../calc/creditcalculatorwindow.cpp \
 		../calc/main.cpp \
 		../calc/mainwindow.cpp \
-		../calc/qcustomplot.cpp
+		../calc/qcustomplot.cpp \
+		../calc/style.cpp
 QMAKE_TARGET  = calc
 DESTDIR       = 
 TARGET        = calc.app/Contents/MacOS/calc
@@ -335,7 +345,7 @@ TARGET        = calc.app/Contents/MacOS/calc
 EXPORT_QMAKE_MAC_SDK = macosx
 EXPORT_QMAKE_MAC_SDK_VERSION = 12.1
 EXPORT_QMAKE_XCODE_DEVELOPER_PATH = /Applications/Xcode.app/Contents/Developer
-EXPORT__QMAKE_STASH_ = /Users/mathosha/Desktop/GITHUB/SmartCalc/src/build-calc-Desktop_x86_darwin_generic_mach_o_64bit-Debug/.qmake.stash
+EXPORT__QMAKE_STASH_ = 
 EXPORT_VALID_ARCHS = x86_64
 EXPORT_DEFAULT_ARCHS = x86_64
 EXPORT_ARCHS = $(filter $(EXPORT_VALID_ARCHS), $(if $(ARCHS), $(ARCHS), $(if $(EXPORT_DEFAULT_ARCHS), $(EXPORT_DEFAULT_ARCHS), $(EXPORT_VALID_ARCHS))))
@@ -577,7 +587,6 @@ Makefile: ../calc/calc.pro /usr/local/share/qt/mkspecs/macx-clang/qmake.conf /us
 		/usr/local/share/qt/mkspecs/features/qt_config.prf \
 		/usr/local/share/qt/mkspecs/macx-clang/qmake.conf \
 		/usr/local/share/qt/mkspecs/features/spec_post.prf \
-		.qmake.stash \
 		/usr/local/share/qt/mkspecs/features/exclusive_builds.prf \
 		/usr/local/share/qt/mkspecs/features/mac/sdk.prf \
 		/usr/local/share/qt/mkspecs/features/toolchain.prf \
@@ -838,7 +847,6 @@ Makefile: ../calc/calc.pro /usr/local/share/qt/mkspecs/macx-clang/qmake.conf /us
 /usr/local/share/qt/mkspecs/features/qt_config.prf:
 /usr/local/share/qt/mkspecs/macx-clang/qmake.conf:
 /usr/local/share/qt/mkspecs/features/spec_post.prf:
-.qmake.stash:
 /usr/local/share/qt/mkspecs/features/exclusive_builds.prf:
 /usr/local/share/qt/mkspecs/features/mac/sdk.prf:
 /usr/local/share/qt/mkspecs/features/toolchain.prf:
@@ -902,8 +910,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/local/share/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../calc/mainwindow.h ../calc/qcustomplot.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../func/stack.c ../func/validator.c ../calc/main.cpp ../calc/mainwindow.cpp ../calc/qcustomplot.cpp ../calc/style.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../creditcalculatorwindow.h ../calc/creditcalculatorwindow.h ../calc/mainwindow.h ../calc/qcustomplot.h ../calc/style.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../func/stack.c ../func/validator.c ../calc/creditcalculatorwindow.cpp ../calc/main.cpp ../calc/mainwindow.cpp ../calc/qcustomplot.cpp ../calc/style.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../calc/mainwindow.ui $(DISTDIR)/
 
 
@@ -914,7 +922,6 @@ clean: compiler_clean
 
 distclean: clean 
 	-$(DEL_FILE) -r calc.app
-	-$(DEL_FILE) .qmake.stash
 	-$(DEL_FILE) Makefile
 
 
@@ -939,9 +946,29 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/local/share/qt/mkspecs/features/data/dummy.cpp
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -pipe -stdlib=libc++ -g -std=gnu++1z $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk -mmacosx-version-min=11 -Wall -Wextra -dM -E -o moc_predefs.h /usr/local/share/qt/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_qcustomplot.cpp
+compiler_moc_header_make_all: moc_creditcalculatorwindow.cpp moc_mainwindow.cpp moc_qcustomplot.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_qcustomplot.cpp
+	-$(DEL_FILE) moc_creditcalculatorwindow.cpp moc_mainwindow.cpp moc_qcustomplot.cpp
+moc_creditcalculatorwindow.cpp: ../calc/creditcalculatorwindow.h \
+		../calc/mainwindow.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QMainWindow \
+		/usr/local/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QLineEdit \
+		/usr/local/lib/QtWidgets.framework/Headers/qlineedit.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QComboBox \
+		/usr/local/lib/QtWidgets.framework/Headers/qcombobox.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QTableWidget \
+		/usr/local/lib/QtWidgets.framework/Headers/qtablewidget.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QPushButton \
+		/usr/local/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QLabel \
+		/usr/local/lib/QtWidgets.framework/Headers/qlabel.h \
+		/usr/local/lib/QtCore.framework/Headers/QObject \
+		/usr/local/lib/QtCore.framework/Headers/qobject.h \
+		moc_predefs.h \
+		/usr/local/share/qt/libexec/moc
+	/usr/local/share/qt/libexec/moc $(DEFINES) --include /Users/mathosha/Desktop/GITHUB/SmartCalc/src/build-calc-Desktop_x86_darwin_generic_mach_o_64bit-Debug/moc_predefs.h -I/usr/local/share/qt/mkspecs/macx-clang -I/Users/mathosha/Desktop/GITHUB/SmartCalc/src/calc -I/usr/local/lib/QtPrintSupport.framework/Headers -I/usr/local/lib/QtWidgets.framework/Headers -I/usr/local/lib/QtGui.framework/Headers -I/usr/local/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.0.0/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/usr/local/lib ../calc/creditcalculatorwindow.h -o moc_creditcalculatorwindow.cpp
+
 moc_mainwindow.cpp: ../calc/mainwindow.h \
 		/usr/local/lib/QtWidgets.framework/Headers/QMainWindow \
 		/usr/local/lib/QtWidgets.framework/Headers/qmainwindow.h \
@@ -965,7 +992,11 @@ compiler_uic_make_all: ui_mainwindow.h
 compiler_uic_clean:
 	-$(DEL_FILE) ui_mainwindow.h
 ui_mainwindow.h: ../calc/mainwindow.ui \
-		/usr/local/share/qt/libexec/uic
+		/usr/local/share/qt/libexec/uic \
+		../calc/qcustomplot.h \
+		/usr/local/lib/QtCore.framework/Headers/qmath.h \
+		/usr/local/lib/QtCore.framework/Headers/qnumeric.h \
+		/usr/local/lib/QtCore.framework/Headers/QtNumeric
 	/usr/local/share/qt/libexec/uic ../calc/mainwindow.ui -o ui_mainwindow.h
 
 compiler_rez_source_make_all:
@@ -986,9 +1017,44 @@ stack.o: ../func/stack.c ../stack.h
 validator.o: ../func/validator.c ../stack.h
 	$(CC) -c $(CFLAGS) $(INCPATH) -o validator.o ../func/validator.c
 
+creditcalculatorwindow.o: ../calc/creditcalculatorwindow.cpp ../calc/creditcalculatorwindow.h \
+		../calc/mainwindow.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QMainWindow \
+		/usr/local/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QLineEdit \
+		/usr/local/lib/QtWidgets.framework/Headers/qlineedit.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QComboBox \
+		/usr/local/lib/QtWidgets.framework/Headers/qcombobox.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QTableWidget \
+		/usr/local/lib/QtWidgets.framework/Headers/qtablewidget.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QPushButton \
+		/usr/local/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QLabel \
+		/usr/local/lib/QtWidgets.framework/Headers/qlabel.h \
+		/usr/local/lib/QtCore.framework/Headers/QObject \
+		/usr/local/lib/QtCore.framework/Headers/qobject.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QHBoxLayout \
+		/usr/local/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		../calc/style.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o creditcalculatorwindow.o ../calc/creditcalculatorwindow.cpp
+
 main.o: ../calc/main.cpp ../calc/mainwindow.h \
 		/usr/local/lib/QtWidgets.framework/Headers/QMainWindow \
 		/usr/local/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		../calc/creditcalculatorwindow.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QLineEdit \
+		/usr/local/lib/QtWidgets.framework/Headers/qlineedit.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QComboBox \
+		/usr/local/lib/QtWidgets.framework/Headers/qcombobox.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QTableWidget \
+		/usr/local/lib/QtWidgets.framework/Headers/qtablewidget.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QPushButton \
+		/usr/local/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QLabel \
+		/usr/local/lib/QtWidgets.framework/Headers/qlabel.h \
+		/usr/local/lib/QtCore.framework/Headers/QObject \
+		/usr/local/lib/QtCore.framework/Headers/qobject.h \
 		/usr/local/lib/QtCore.framework/Headers/QFile \
 		/usr/local/lib/QtCore.framework/Headers/qfile.h \
 		/usr/local/lib/QtCore.framework/Headers/QString \
@@ -1004,14 +1070,24 @@ mainwindow.o: ../calc/mainwindow.cpp /usr/local/lib/QtCore.framework/Headers/QFi
 		../calc/mainwindow.h \
 		/usr/local/lib/QtWidgets.framework/Headers/QMainWindow \
 		/usr/local/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		../calc/style.cpp \
-		/usr/local/lib/QtWidgets.framework/Headers/QApplication \
-		/usr/local/lib/QtWidgets.framework/Headers/qapplication.h \
 		../calc/qcustomplot.h \
 		/usr/local/lib/QtCore.framework/Headers/qmath.h \
 		/usr/local/lib/QtCore.framework/Headers/qnumeric.h \
 		/usr/local/lib/QtCore.framework/Headers/QtNumeric \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		../calc/creditcalculatorwindow.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QLineEdit \
+		/usr/local/lib/QtWidgets.framework/Headers/qlineedit.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QComboBox \
+		/usr/local/lib/QtWidgets.framework/Headers/qcombobox.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QTableWidget \
+		/usr/local/lib/QtWidgets.framework/Headers/qtablewidget.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QPushButton \
+		/usr/local/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QLabel \
+		/usr/local/lib/QtWidgets.framework/Headers/qlabel.h \
+		/usr/local/lib/QtCore.framework/Headers/QObject \
+		/usr/local/lib/QtCore.framework/Headers/qobject.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../calc/mainwindow.cpp
 
 qcustomplot.o: ../calc/qcustomplot.cpp ../calc/qcustomplot.h \
@@ -1019,6 +1095,17 @@ qcustomplot.o: ../calc/qcustomplot.cpp ../calc/qcustomplot.h \
 		/usr/local/lib/QtCore.framework/Headers/qnumeric.h \
 		/usr/local/lib/QtCore.framework/Headers/QtNumeric
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qcustomplot.o ../calc/qcustomplot.cpp
+
+style.o: ../calc/style.cpp ../calc/style.h \
+		../calc/mainwindow.h \
+		/usr/local/lib/QtWidgets.framework/Headers/QMainWindow \
+		/usr/local/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/usr/local/lib/QtCore.framework/Headers/QString \
+		/usr/local/lib/QtCore.framework/Headers/qstring.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o style.o ../calc/style.cpp
+
+moc_creditcalculatorwindow.o: moc_creditcalculatorwindow.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_creditcalculatorwindow.o moc_creditcalculatorwindow.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

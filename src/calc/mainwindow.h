@@ -20,6 +20,7 @@ private slots:
     void append_to_input(QString text);
     void calculate_expression();
     void plot_graph();
+    void openCreditCalculator();
 
 private:
     Ui::MainWindow *ui;

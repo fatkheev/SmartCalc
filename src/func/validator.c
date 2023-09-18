@@ -1,5 +1,8 @@
 #include "../stack.h"
 
+bool isInvalidChar(const char* str, int i, int dot_count);
+bool validate_functions_in_string(const char* str);
+
 bool validate_string(const char* str) {
   int open_parentheses = 0;
   int close_parentheses = 0;
@@ -19,19 +22,23 @@ bool validate_string(const char* str) {
       is_valid = false;
     }
 
+    if (str[i] == '(') {
+      open_parentheses++;
+    } else if (str[i] == ')') {
+      close_parentheses++;
+    }
+
     int j = i + 1;
-    while (is_valid && str[j] != ')') {  // ищет скобку
+    while (is_valid && str[j] && str[j] != ')') {
       j++;
     }
 
     int k = j - 1;
-    while (str[k] == ' ' &&
-           k > i) {  // потом двигается назад, схлопывая пробелы
+    while (k > i && str[k] == ' ') {
       k--;
     }
 
-    if (isOperator(
-            str[k])) {  // потом проверяет, есть ли перед скобкой оператор
+    if (str[k] && isOperator(str[k])) {
       is_valid = false;
     }
   }
@@ -48,7 +55,6 @@ bool has_function(const char* str, const char* func) {
   return strstr(str, func) != NULL;
 }
 
-// Часть функции validate_string для рефакторинга
 bool isInvalidChar(const char* str, int i, int dot_count) {
   bool result = false;
 
@@ -77,7 +83,7 @@ bool isInvalidChar(const char* str, int i, int dot_count) {
   } else if (str[i] == '.') {
     if (i == 0 || !isdigit(str[i - 1])) {
       int j = i + 1;
-      if (!isdigit(str[j])) {
+      if (!str[j] || !isdigit(str[j])) {
         result = true;
       }
     }
@@ -86,7 +92,6 @@ bool isInvalidChar(const char* str, int i, int dot_count) {
   return result;
 }
 
-// Проверка ввода функций
 bool validate_functions_in_string(const char* str) {
   const char* functions[] = {"sin",  "cos",  "tan", "asin", "acos",
                              "atan", "sqrt", "ln",  "log",  "mod"};
@@ -99,7 +104,8 @@ bool validate_functions_in_string(const char* str) {
       bool is_valid = false;
 
       for (int j = 0; !is_valid && j < num_functions; j++) {
-        if (strncmp(str + i, functions[j], strlen(functions[j])) == 0) {
+        if (i + strlen(functions[j]) <= strlen(str) &&
+            strncmp(str + i, functions[j], strlen(functions[j])) == 0) {
           if (strcmp(functions[j], "mod") == 0) {
             int k = i - 1;
             while (k >= 0 && str[k] == ' ') k--;

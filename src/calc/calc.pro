@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     ../func/stack.c \
     ../func/validator.c \
+    creditcalculatorwindow.cpp \
     main.cpp \
     mainwindow.cpp \
     qcustomplot.cpp \
@@ -22,8 +23,11 @@ QT += \
     printsupport
 
 HEADERS += \
+    ../creditcalculatorwindow.h \
+    creditcalculatorwindow.h \
     mainwindow.h \
-    qcustomplot.h
+    qcustomplot.h \
+    style.h
     qcustomplot.h
 
 FORMS += \

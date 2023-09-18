@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "creditcalculatorwindow.h"
 
 #include <QFile>
 #include <QString>
