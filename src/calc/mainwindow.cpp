@@ -14,8 +14,13 @@ extern "C" {
 #include "qcustomplot.h"
 
 #include "ui_mainwindow.h"
-
 #include "creditcalculatorwindow.h"
+
+// Кот
+#include <QLabel>
+#include <QMovie>
+#include <QTimer>
+#include <QCursor>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -84,6 +89,48 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->button_credit, &QPushButton::clicked, this, &MainWindow::openCreditCalculator);
 
+    // Начало кода анимации котика
+        QWidget *widget = new QWidget(this);
+
+        QLabel *label = new QLabel(widget);
+        label->setStyleSheet("background: transparent; border: none;");
+
+        QMovie *catMovie = new QMovie(":/cat.gif");
+
+        // Reintroduced the scaling
+        const int newWidth = 300;  // ширина
+        const int newHeight = 300; // высота
+        QObject::connect(catMovie, &QMovie::frameChanged, [=]() {
+            QPixmap scaledPixmap = catMovie->currentPixmap().scaled(newWidth, newHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            label->setPixmap(scaledPixmap);
+            widget->setFixedSize(scaledPixmap.size());
+        });
+
+        label->setMovie(catMovie);
+        catMovie->start();
+
+        // Следуем за курсором с задержкой
+        QTimer *timer = new QTimer(this);
+        QObject::connect(timer, &QTimer::timeout, [=]() {
+            QPoint globalMousePos = QCursor::pos();
+            // Вычисляем координаты для widget так, чтобы он был рядом с курсором
+            QPoint targetPos = globalMousePos - QPoint(newWidth - 100, newHeight - 100);
+            QPoint currentPos = widget->pos();
+            QPoint newPos = currentPos + 0.05 * (targetPos - currentPos); // "скользящее" следование
+            widget->move(newPos);
+        });
+        timer->start(16);  // Обновляем положение каждые 16 мс
+
+        // Обновление экрана
+        QTimer *updateTimer = new QTimer(this);
+        QObject::connect(updateTimer, &QTimer::timeout, [=]() {
+            this->update();
+        });
+        updateTimer->start(8);  // Обновляем экран каждые 8 мс (в два раза выстрее самой анимации, это убирает рамку)
+
+        widget->show();
+        // Конец кода анимации котика
+
 }
 
 // Это деструктор?
@@ -121,7 +168,7 @@ void MainWindow::calculate_expression() {
 void plotFunction(QCustomPlot *customPlot, const QString &function,
                   double xMin, double xMax, double yMin, double yMax) {
     // Подготовка данных
-    QVector<double> x(401), y(401); // initialize with entries 0..400
+    QVector<double> x(401), y(401);
     for (int i = 0; i < 401; ++i) {
         x[i] = xMin + (xMax - xMin) * i / 400.0;
         // Use the calculate function for y[i]
@@ -158,6 +205,7 @@ QString MainWindow::replaceXWithValue(const QString &expression, const QString &
     return modifiedExpression;
 }
 
+// Кнопка возврата к основному калькулятору
 void MainWindow::openCreditCalculator() {
     this->hide();
     CreditCalculatorWindow *creditWindow = new CreditCalculatorWindow(this);
