@@ -30,8 +30,8 @@ MainWindow::MainWindow(QWidget *parent)
     // Задание размеров основного окна
         QScreen *screen = QGuiApplication::primaryScreen();
         QRect screenGeometry = screen->availableGeometry();
-        int height = std::min(1100, static_cast<int>(0.7 * screenGeometry.height()));
-        int width = std::min(1400, static_cast<int>(0.7 * screenGeometry.width()));
+        int height = std::min(1100, static_cast<int>(0.8 * screenGeometry.height()));
+        int width = std::min(1400, static_cast<int>(0.8 * screenGeometry.width()));
         this->setFixedSize(width, height);
 
     // Для кнопки C
