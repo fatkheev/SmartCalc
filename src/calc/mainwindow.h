@@ -22,9 +22,12 @@ private slots:
     void plot_graph();
     void openCreditCalculator();
     void checkInputLength();
+    void validateInputField();
 
 private:
     Ui::MainWindow *ui;
     QString replaceXWithValue(const QString &expression, const QString &xValue);
+    void handleFocusChange();
+    bool eventFilter(QObject *target, QEvent *event) override;
 };
 #endif // MAINWINDOW_H
