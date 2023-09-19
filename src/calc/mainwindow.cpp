@@ -11,7 +11,6 @@ extern "C" {
 
 #include "qcustomplot.h"
 #include <cmath>
-#include "qcustomplot.h"
 
 #include "ui_mainwindow.h"
 #include "creditcalculatorwindow.h"
@@ -27,6 +26,13 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    // Задание размеров основного окна
+        QScreen *screen = QGuiApplication::primaryScreen();
+        QRect screenGeometry = screen->availableGeometry();
+        int height = std::min(1100, static_cast<int>(0.7 * screenGeometry.height()));
+        int width = std::min(1400, static_cast<int>(0.7 * screenGeometry.width()));
+        this->setFixedSize(width, height);
 
     // Для кнопки C
     connect(ui->CButton, &QPushButton::clicked, [=](){ ui->expr_input->clear(); });
@@ -116,7 +122,7 @@ MainWindow::MainWindow(QWidget *parent)
         QObject::connect(timer, &QTimer::timeout, [=]() {
             QPoint globalMousePos = QCursor::pos();
             // Вычисляем координаты для widget так, чтобы он был рядом с курсором
-            QPoint targetPos = globalMousePos - QPoint(newWidth - 100, newHeight - 100);
+            QPoint targetPos = globalMousePos - QPoint(newWidth - 50, newHeight - 50);
             QPoint currentPos = widget->pos();
             QPoint newPos = currentPos + 0.05 * (targetPos - currentPos); // "скользящее" следование
             widget->move(newPos);
@@ -177,12 +183,12 @@ void MainWindow::calculate_expression() {
 void plotFunction(QCustomPlot *customPlot, const QString &function,
                   double xMin, double xMax, double yMin, double yMax) {
     // Подготовка данных
-    QVector<double> x(401), y(401);
+    QVector<double> x(401), y(401); // Создаю массивы данных
     for (int i = 0; i < 401; ++i) {
-        x[i] = xMin + (xMax - xMin) * i / 400.0;
-        // Use the calculate function for y[i]
+        x[i] = xMin + (xMax - xMin) * i / 400.0; // Заполняю массив x[i] значениями, которые равномерно распределены между xMin и xMax
+        // Использую сишную функцию calculate для вычисления y[i]
         QString current_expr = function;
-        current_expr.replace("x", QString::number(x[i]));
+        current_expr.replace("x", QString::number(x[i])); // Заменяю x
         y[i] = calculate(current_expr.toStdString().c_str());
     }
 
@@ -190,7 +196,7 @@ void plotFunction(QCustomPlot *customPlot, const QString &function,
     customPlot->addGraph();
     customPlot->graph(0)->setData(x, y);
 
-    // установка области видисости графика
+    // установка области видимости графика
     customPlot->xAxis->setRange(xMin, xMax);
     customPlot->yAxis->setRange(yMin, yMax);
     customPlot->replot();
