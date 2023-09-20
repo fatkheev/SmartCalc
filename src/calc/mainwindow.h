@@ -29,5 +29,8 @@ private:
     QString replaceXWithValue(const QString &expression, const QString &xValue);
     void handleFocusChange();
     bool eventFilter(QObject *target, QEvent *event) override;
+    QMovie *catMovie;
+    QTimer *timer;
+    QTimer *updateTimer;
 };
 #endif // MAINWINDOW_H

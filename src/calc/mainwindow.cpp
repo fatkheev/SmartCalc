@@ -29,21 +29,19 @@ MainWindow::MainWindow(QWidget *parent)
 
     qApp->setStyleSheet("QLineEdit { border: 2px solid transparent; background-color: #eeeeee; border-radius: 5px; color: black; placeholder-text-color: dark-gray; }");
 
-    // Запрещаем ввод с физической клавиатуры
-    ui->expr_input->setReadOnly(true);
-    ui->x_value_input->setReadOnly(true);
-    ui->lineEdit_xMin->setReadOnly(true);
-    ui->lineEdit_xMax->setReadOnly(true);
-    ui->lineEdit_yMin->setReadOnly(true);
-    ui->lineEdit_yMax->setReadOnly(true);
+//    // Запрещаем ввод с физической клавиатуры
+//    ui->expr_input->setReadOnly(true);
+//    ui->x_value_input->setReadOnly(true);
+//    ui->lineEdit_xMin->setReadOnly(true);
+//    ui->lineEdit_xMax->setReadOnly(true);
+//    ui->lineEdit_yMin->setReadOnly(true);
+//    ui->lineEdit_yMax->setReadOnly(true);
 
     // Разрешаем ввод значений области видимости только цифры
     connect(ui->lineEdit_xMin, &QLineEdit::textChanged, this, &MainWindow::validateInputField);
     connect(ui->lineEdit_xMax, &QLineEdit::textChanged, this, &MainWindow::validateInputField);
     connect(ui->lineEdit_yMin, &QLineEdit::textChanged, this, &MainWindow::validateInputField);
     connect(ui->lineEdit_yMax, &QLineEdit::textChanged, this, &MainWindow::validateInputField);
-
-
 
     // Устанавливаем синюю рамку для активного поля
     ui->expr_input->setStyleSheet("border: 2px solid transparent;");
@@ -80,6 +78,13 @@ MainWindow::MainWindow(QWidget *parent)
             ui->lineEdit_xMax->clear();
             ui->lineEdit_yMin->clear();
             ui->lineEdit_yMax->clear();
+
+            // Стандартный стиль и placeholder
+            QPalette pal = ui->x_value_input->palette();
+            pal.setColor(QPalette::PlaceholderText, Qt::gray); // сброс цвета placeholder на стандартный
+            ui->x_value_input->setPalette(pal);
+            ui->expr_input->setPalette(pal);
+            ui->x_value_input->setPlaceholderText("Введите значение X");
         });
 
     // Для кнопки (
@@ -137,12 +142,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->button_divide, &QPushButton::clicked, [=](){ append_to_input("/"); });
 
     // Тригонометрия
-    connect(ui->button_sin, &QPushButton::clicked, [=](){ append_to_input("sin("); });
-    connect(ui->button_cos, &QPushButton::clicked, [=](){ append_to_input("cos("); });
-    connect(ui->button_tan, &QPushButton::clicked, [=](){ append_to_input("tan("); });
-    connect(ui->button_asin, &QPushButton::clicked, [=](){ append_to_input("asin("); });
-    connect(ui->button_acos, &QPushButton::clicked, [=](){ append_to_input("acos("); });
-    connect(ui->button_atan, &QPushButton::clicked, [=](){ append_to_input("atan("); });
+    connect(ui->button_sin, &QPushButton::clicked, [=](){ append_to_input("sin"); });
+    connect(ui->button_cos, &QPushButton::clicked, [=](){ append_to_input("cos"); });
+    connect(ui->button_tan, &QPushButton::clicked, [=](){ append_to_input("tan"); });
+    connect(ui->button_asin, &QPushButton::clicked, [=](){ append_to_input("asin"); });
+    connect(ui->button_acos, &QPushButton::clicked, [=](){ append_to_input("acos"); });
+    connect(ui->button_atan, &QPushButton::clicked, [=](){ append_to_input("atan"); });
 
     // Дополнительные функции
     connect(ui->button_sqrt, &QPushButton::clicked, [=](){ append_to_input("sqrt("); });
@@ -155,6 +160,16 @@ MainWindow::MainWindow(QWidget *parent)
     //Подключение кнопки "="
     connect(ui->button_equals, &QPushButton::clicked, this, &MainWindow::calculate_expression);
 
+    connect(ui->x_value_input, &QLineEdit::textChanged, [=](const QString &text) {
+        if (!text.isEmpty()) {
+            ui->x_value_input->setStyleSheet("");
+            QPalette pal = ui->x_value_input->palette();
+            pal.setColor(QPalette::PlaceholderText, Qt::gray); // сброс цвета placeholder на стандартный
+            ui->x_value_input->setPalette(pal);
+            ui->x_value_input->setPlaceholderText("");
+        }
+    });
+
     connect(ui->button_credit, &QPushButton::clicked, this, &MainWindow::openCreditCalculator);
 
     // Начало кода анимации котика
@@ -163,7 +178,7 @@ MainWindow::MainWindow(QWidget *parent)
         QLabel *label = new QLabel(widget);
         label->setStyleSheet("background: transparent; border: none;");
 
-        QMovie *catMovie = new QMovie(":/cat.gif");
+        catMovie = new QMovie(":/cat.gif");
 
         // Отдаление котика от курсора
         const int newWidth = 200;  // ширина
@@ -178,7 +193,7 @@ MainWindow::MainWindow(QWidget *parent)
         catMovie->start();
 
         // Следуем за курсором с задержкой
-        QTimer *timer = new QTimer(this);
+        timer = new QTimer(this);
         QObject::connect(timer, &QTimer::timeout, [=]() {
             QPoint globalMousePos = QCursor::pos();
             // Вычисляем координаты для widget так, чтобы он был рядом с курсором
@@ -190,7 +205,7 @@ MainWindow::MainWindow(QWidget *parent)
         timer->start(16);  // Обновляем положение каждые 16 мс
 
         // Обновление экрана
-        QTimer *updateTimer = new QTimer(this);
+        updateTimer = new QTimer(this);
         QObject::connect(updateTimer, &QTimer::timeout, [=]() {
             this->update();
         });
@@ -201,10 +216,16 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
-// Это деструктор?
 MainWindow::~MainWindow()
 {
-    delete ui;
+        timer->stop();
+        updateTimer->stop();
+
+        delete timer;
+        delete updateTimer;
+
+        delete catMovie;
+        delete ui;
 }
 
 // Функция проверки количества символов в поле ввода
@@ -244,6 +265,15 @@ void MainWindow::calculate_expression() {
         return;
     }
 
+    // Проверяем, содержит ли выражение символ "x" и пусто ли поле x_value_input
+    if (ui->expr_input->text().contains("x") && ui->x_value_input->text().isEmpty()) {
+        QPalette pal = ui->x_value_input->palette();
+        pal.setColor(QPalette::PlaceholderText, Qt::red);
+        ui->x_value_input->setPalette(pal);
+        ui->x_value_input->setPlaceholderText("Требуется значение X");
+        return;
+    }
+
     QString xValue = ui->x_value_input->text();
     QString expression = replaceXWithValue(ui->expr_input->text(), xValue);
 
@@ -258,32 +288,86 @@ void MainWindow::calculate_expression() {
 // Функция отрисовки графика
 void plotFunction(QCustomPlot *customPlot, const QString &function,
                   double xMin, double xMax, double yMin, double yMax) {
-    // Подготовка данных
-    QVector<double> x(401), y(401); // Создаю массивы данных
-    for (int i = 0; i < 401; ++i) {
-        x[i] = xMin + (xMax - xMin) * i / 400.0; // Заполняю массив x[i] значениями, которые равномерно распределены между xMin и xMax
+    customPlot->clearGraphs();
+    const double threshold = 0.1 * (yMax - yMin);  // 10% от диапазона y
+    const double asymptoteThreshold = 10 * (yMax - yMin);  // порог для вертикальных асимптот
 
-        // Обработка отрицательных значений x
+    QVector<double> x(401), y(401);
+
+    // Расширяем диапазон x и y на 2 единицы
+    double extendedXMin = xMin - 2.0;
+    double extendedXMax = xMax + 2.0;
+    double extendedYMin = yMin - 2.0;
+    double extendedYMax = yMax + 2.0;
+
+    bool segmentStarted = false;
+    QVector<double> segmentX, segmentY;
+    for (int i = 0; i < 401; ++i) {
+        x[i] = extendedXMin + (extendedXMax - extendedXMin) * i / 400.0;
         QString xValueStr = QString::number(x[i]);
+
         if (xValueStr.startsWith("-")) {
             xValueStr = "(" + xValueStr + ")";
         }
 
-        // Использую сишную функцию calculate для вычисления y[i]
         QString current_expr = function;
-        current_expr.replace("x", xValueStr); // Заменяю x
+        current_expr.replace("x", xValueStr);
         y[i] = calculate(current_expr.toStdString().c_str());
+
+        if (function.contains("asin") && (x[i] <= -1.0 || x[i] >= 1.0)) {
+            continue;
+        }
+
+        if (i > 0 && function.contains("tan") && std::abs(y[i] - y[i-1]) > asymptoteThreshold) {
+            if (segmentStarted) {
+                customPlot->addGraph();
+                customPlot->graph()->setData(segmentX, segmentY);
+                segmentX.clear();
+                segmentY.clear();
+                segmentStarted = false;
+            }
+            continue;
+        }
+
+        // Для обработки логарифмических функций и других неопределенностей
+        if (std::isinf(y[i]) || std::isnan(y[i])) {
+            y[i] = (y[i-1] > 0) ? extendedYMax : extendedYMin;
+        }
+
+        if (!segmentStarted) {
+            segmentStarted = true;
+        }
+
+        segmentX.push_back(x[i]);
+        segmentY.push_back(y[i]);
+
+        if (!std::isnan(y[i])) {
+            if (y[i] > extendedYMax - threshold) {
+                segmentY.last() = extendedYMax;
+            } else if (y[i] < extendedYMin + threshold) {
+                segmentY.last() = extendedYMin;
+            }
+        }
     }
 
-    // создать график и присвоить ему данные:
-    customPlot->addGraph();
-    customPlot->graph(0)->setData(x, y);
+    if (!segmentX.isEmpty() && !segmentY.isEmpty()) {
+        customPlot->addGraph();
+        customPlot->graph()->setData(segmentX, segmentY);
+    }
 
-    // установка области видимости графика
-    customPlot->xAxis->setRange(xMin, xMax);
+    customPlot->xAxis->setRange(xMin, xMax);  // Ограничиваем видимую область исходными границами
     customPlot->yAxis->setRange(yMin, yMax);
     customPlot->replot();
 }
+
+
+
+
+
+
+
+
+
 
 // Функция установки поля видимости
 void MainWindow::plot_graph() {
