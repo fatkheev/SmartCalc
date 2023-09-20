@@ -46,7 +46,7 @@ START_TEST(test_validate_string) {
 }
 END_TEST
 
-//Тесты для калькуляции
+// Тесты для калькуляции
 START_TEST(test_calculate_1) {
   char postfix[] = "10-5+3";
   double result = calculate(postfix);

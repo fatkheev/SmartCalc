@@ -46,7 +46,7 @@ open:
 
 uninstall:
 	cd calc && rm -rf Makefile calc.app calc.pro.user .qmake.stash .qtc_clangd .tmp .qm
-	rm -rf build/*
+	rm -rf build
 
 dist: install
 	rm -rf Archive_calc/
@@ -58,17 +58,16 @@ dvi:
 	open docs/index.html
 
 valgrind:
-	CK_FORK=no valgrind --vgdb=no --leak-check=full --show-reachable=yes --show-leak-kinds=all --track-origins=yes --verbose --read-var-info=yes ./calc
+	valgrind --vgdb=no --leak-check=full --show-reachable=yes --show-leak-kinds=all --track-origins=yes --verbose --read-var-info=yes ./build/calc.app/Contents/MacOS/calc
 
 valgrind_main: clean
 	make main && CK_FORK=no valgrind --vgdb=no --leak-check=full --show-reachable=yes --show-leak-kinds=all --track-origins=yes --verbose --read-var-info=yes ./main
 
 leaks:
-	cd build/calc.app/Contents/MacOS
-	leaks -atExit -- ./calc
-	cd ../../../..
+	leaks -atExit -- ./build/Contents/MacOS/calc
 
 clean: 
+	rm -rf *.o main
 	rm -rf *.o test
 	rm -rf *.o *.a
 	rm -rf *.o a.out
@@ -79,6 +78,4 @@ clean:
 	rm -rf *.o report
 	rm -rf Archive_calc
 	rm -rf Archive_calc.tar.gz
-	rm -rf build
-	rm -rf buildQT
 	clear

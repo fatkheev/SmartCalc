@@ -238,4 +238,3 @@ void CreditCalculatorWindow::handleBackButton() {
   emit switchToMainCalculator();
   this->close();
 }
-

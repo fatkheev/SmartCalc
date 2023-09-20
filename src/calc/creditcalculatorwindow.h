@@ -1,15 +1,16 @@
 #ifndef CREDITCALCULATORWINDOW_H
 #define CREDITCALCULATORWINDOW_H
 
-#include "mainwindow.h"
-#include <QLineEdit>
 #include <QComboBox>
-#include <QTableWidget>
-#include <QPushButton>
-#include <QLabel>
-#include <QObject>
 #include <QGuiApplication>
+#include <QLabel>
+#include <QLineEdit>
+#include <QObject>
+#include <QPushButton>
 #include <QScreen>
+#include <QTableWidget>
+
+#include "mainwindow.h"
 
 class CreditCalculatorWindow : public QMainWindow {
   Q_OBJECT
