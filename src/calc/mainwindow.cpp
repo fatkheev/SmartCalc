@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
           &MainWindow::validateInputField);
   connect(ui->lineEdit_yMin, &QLineEdit::textChanged, this,
           &MainWindow::validateInputField);
-  connect(ui->lineEdit_yMax, &QLineEdit::textChanged, this,
+  connect(ui->lineEdit_yMax, &QLineEdit::textChanged, this1,
           &MainWindow::validateInputField);
 
   // Устанавливаем синюю рамку для активного поля
