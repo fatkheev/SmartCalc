@@ -15,11 +15,7 @@ CreditCalculatorWindow::CreditCalculatorWindow(QWidget *parent)
     : QMainWindow(parent), showAllButtonRow(-1) {
   this->setWindowTitle("Кредитный калькулятор");
 
-  QScreen *screen = QGuiApplication::primaryScreen();
-  QRect screenGeometry = screen->geometry();
-  int height = (screenGeometry.height() * 80) / 100;
-  int width = (screenGeometry.width() * 80) / 100;
-  this->resize(width, height);
+  this->resize(1200, 782);
 
   QWidget *centralWidget = new QWidget(this);
   centralWidget->setStyleSheet(mainWidgetStyle);

@@ -28,7 +28,7 @@ rebuild: clean all
 style_check:
 	find . -name "*.c" -o -name "*.h" -o -name "*.cpp" | xargs clang-format -style=Google -n
 
-style:
+style_set:
 	find . -name "*.c" -o -name "*.h" -o -name "*.cpp" | xargs clang-format -style=Google -i
 
 
