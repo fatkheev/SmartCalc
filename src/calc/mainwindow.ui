@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Calculator</string>
+   <string>MathosHa Calculator</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="maximumSize">
@@ -1651,63 +1651,90 @@ margin: 0px 0px 0px 0px
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_xMin">
-         <property name="styleSheet">
-          <string notr="true">color: black;
+        <widget class="QWidget" name="gridWidget" native="true">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>80</height>
+          </size>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>0</number>
+          </property>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineEdit_yMin">
+            <property name="styleSheet">
+             <string notr="true">color: black;
 border: 2px solid gray;
 border-radius: 10px;
 padding: 0 8px;
 background: #ededed;
 selection-background-color: #eeeeee;</string>
-         </property>
-         <property name="placeholderText">
-          <string>xMin</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="lineEdit_xMax">
-         <property name="styleSheet">
-          <string notr="true">color: black;
+            </property>
+            <property name="placeholderText">
+             <string>yMin</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="lineEdit_xMin">
+            <property name="styleSheet">
+             <string notr="true">color: black;
 border: 2px solid gray;
 border-radius: 10px;
 padding: 0 8px;
 background: #ededed;
 selection-background-color: #eeeeee;</string>
-         </property>
-         <property name="placeholderText">
-          <string>xMax</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="lineEdit_yMin">
-         <property name="styleSheet">
-          <string notr="true">color: black;
+            </property>
+            <property name="placeholderText">
+             <string>xMin</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLineEdit" name="lineEdit_xMax">
+            <property name="styleSheet">
+             <string notr="true">color: black;
 border: 2px solid gray;
 border-radius: 10px;
 padding: 0 8px;
 background: #ededed;
 selection-background-color: #eeeeee;</string>
-         </property>
-         <property name="placeholderText">
-          <string>yMin</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="lineEdit_yMax">
-         <property name="styleSheet">
-          <string notr="true">color: black;
+            </property>
+            <property name="placeholderText">
+             <string>xMax</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineEdit_yMax">
+            <property name="styleSheet">
+             <string notr="true">color: black;
 border: 2px solid gray;
 border-radius: 10px;
 padding: 0 8px;
 background: #ededed;
 selection-background-color: #eeeeee;</string>
-         </property>
-         <property name="placeholderText">
-          <string>yMax</string>
-         </property>
+            </property>
+            <property name="placeholderText">
+             <string>yMax</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>

@@ -27,15 +27,16 @@ MainWindow::MainWindow(QWidget *parent)
 
   qApp->setStyleSheet(
       "QLineEdit { border: 2px solid transparent; background-color: #eeeeee; "
+      "font-size: 16px;"
       "border-radius: 5px; color: black; placeholder-text-color: dark-gray; }");
 
-  //    // Запрещаем ввод с физической клавиатуры
-  //    ui->expr_input->setReadOnly(true);
-  //    ui->x_value_input->setReadOnly(true);
-  //    ui->lineEdit_xMin->setReadOnly(true);
-  //    ui->lineEdit_xMax->setReadOnly(true);
-  //    ui->lineEdit_yMin->setReadOnly(true);
-  //    ui->lineEdit_yMax->setReadOnly(true);
+  // Запрещаем ввод с физической клавиатуры
+  ui->expr_input->setReadOnly(true);
+  ui->x_value_input->setReadOnly(true);
+  ui->lineEdit_xMin->setReadOnly(true);
+  ui->lineEdit_xMax->setReadOnly(true);
+  ui->lineEdit_yMin->setReadOnly(true);
+  ui->lineEdit_yMax->setReadOnly(true);
 
   // Разрешаем ввод значений области видимости только цифры
   connect(ui->lineEdit_xMin, &QLineEdit::textChanged, this,
@@ -157,17 +158,17 @@ MainWindow::MainWindow(QWidget *parent)
 
   // Тригонометрия
   connect(ui->button_sin, &QPushButton::clicked,
-          [=]() { append_to_input("sin"); });
+          [=]() { append_to_input("sin("); });
   connect(ui->button_cos, &QPushButton::clicked,
-          [=]() { append_to_input("cos"); });
+          [=]() { append_to_input("cos("); });
   connect(ui->button_tan, &QPushButton::clicked,
-          [=]() { append_to_input("tan"); });
+          [=]() { append_to_input("tan("); });
   connect(ui->button_asin, &QPushButton::clicked,
-          [=]() { append_to_input("asin"); });
+          [=]() { append_to_input("asin("); });
   connect(ui->button_acos, &QPushButton::clicked,
-          [=]() { append_to_input("acos"); });
+          [=]() { append_to_input("acos("); });
   connect(ui->button_atan, &QPushButton::clicked,
-          [=]() { append_to_input("atan"); });
+          [=]() { append_to_input("atan("); });
 
   // Дополнительные функции
   connect(ui->button_sqrt, &QPushButton::clicked,
