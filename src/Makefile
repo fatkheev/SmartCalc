@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -Werror -std=c11
 TESTFLAGS2 = -lcheck -lm -lpthread -lrt -lsubunit -g
 GCOVFLAGS = -fprofile-arcs -ftest-coverage
 
-all: test
+all: test uninstall install
 
 s21_matrix.a : func/*.c
 	$(CC) $(CFLAGS) -g -std=c11 -c func/*.c
@@ -31,12 +31,6 @@ style_check:
 style_set:
 	find . -name "*.c" -o -name "*.h" -o -name "*.cpp" | xargs clang-format -style=Google -i
 
-
-main: clean
-	$(CC) $(CFLAGS) -c func/*.c
-	$(CC) $(CFLAGS) main.c *.o -o main
-	./main
-
 install: uninstall
 	cd calc/ && qmake && make && make clean
 	mv calc/calc.app build
@@ -44,7 +38,7 @@ install: uninstall
 open:
 	./build/Contents/MacOS/calc
 
-uninstall:
+uninstall: clean
 	cd calc && rm -rf Makefile calc.app calc.pro.user .qmake.stash .qtc_clangd .tmp .qm
 	rm -rf build
 
@@ -67,7 +61,8 @@ leaks:
 	leaks -atExit -- ./build/Contents/MacOS/calc
 
 clean: 
-	rm -rf *.o main
+	rm -rf *.o calc/calc.pro.*
+	rm -rf *.o build*
 	rm -rf *.o test
 	rm -rf *.o *.a
 	rm -rf *.o a.out

@@ -23,7 +23,6 @@ QT += \
     printsupport
 
 HEADERS += \
-    ../creditcalculatorwindow.h \
     creditcalculatorwindow.h \
     mainwindow.h \
     qcustomplot.h \
