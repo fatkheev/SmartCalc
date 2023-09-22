@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
   qApp->setStyleSheet(
       "QLineEdit { border: 2px solid transparent; background-color: #eeeeee; "
       "font-size: 16px;"
-      "border-radius: 5px; color: black; placeholder-text-color: dark-gray; }");
+      "border-radius: 5px; color: black;}");
 
   // Запрещаем ввод с физической клавиатуры
   ui->expr_input->setReadOnly(true);
@@ -226,7 +226,7 @@ MainWindow::MainWindow(QWidget *parent)
   QObject::connect(timer, &QTimer::timeout, [=]() {
     QPoint globalMousePos = QCursor::pos();
     // Вычисляем координаты для widget так, чтобы он был рядом с курсором
-    QPoint targetPos = globalMousePos - QPoint(newWidth - 100, newHeight - 100);
+    QPoint targetPos = globalMousePos - QPoint(newWidth + 100, newHeight + 100);
     QPoint currentPos = widget->pos();
     QPoint newPos = currentPos +
                     0.05 * (targetPos - currentPos);  // "скользящее" следование
