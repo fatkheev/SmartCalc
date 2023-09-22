@@ -195,6 +195,13 @@ START_TEST(test_calculate_21) {
 }
 END_TEST
 
+START_TEST(test_calculate_22) {
+  char postfix[] = "2^3^2";
+  double result = calculate(postfix);
+  ck_assert_double_eq_tol(result, pow(2, pow(3, 2)), 1e-6);
+}
+END_TEST
+
 Suite* calculator_suite(void) {
   Suite* s;
   TCase* tc_core;
@@ -229,6 +236,7 @@ Suite* calculator_suite(void) {
   ADD_TEST(tc_core, test_calculate_19);
   ADD_TEST(tc_core, test_calculate_20);
   ADD_TEST(tc_core, test_calculate_21);
+  ADD_TEST(tc_core, test_calculate_22);
 
   suite_add_tcase(s, tc_core);
 

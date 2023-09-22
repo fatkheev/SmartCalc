@@ -251,7 +251,8 @@ void ClosingParenthesis(char* operators, int* top, char* output, int* k) {
 // Обработка операторов с приоритетами
 void OperatorsPriority(char ch, char* operators, int* top, char* output,
                        int* k) {
-  while (*top != -1 && priority(operators[*top]) >= priority(ch)) {
+  while (*top != -1 && (ch != '^' ? priority(operators[*top]) >= priority(ch)
+                                  : priority(operators[*top]) > priority(ch))) {
     output[(*k)++] = operators[(*top)--];
     output[(*k)++] = ' ';
   }

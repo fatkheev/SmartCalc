@@ -74,3 +74,8 @@ clean:
 	rm -rf Archive_calc
 	rm -rf Archive_calc.tar.gz
 	clear
+
+main: clean
+	$(CC) $(CFLAGS) -c func/*.c
+	$(CC) $(CFLAGS) main.c *.o -o main
+	./main
